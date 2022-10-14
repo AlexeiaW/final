@@ -1,0 +1,14 @@
+{% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
+
+<h1>Your friends</h1>
+<table>
+  <tr>
+    <th>Friend username</th>
+  </tr>
+  {% for friend in appuser.friends.all %}
+  <tr>
+    <td>{{friend}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

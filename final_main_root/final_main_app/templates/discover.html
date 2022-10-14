@@ -1,0 +1,66 @@
+{% extends "./base.html" %} {% block content %} {% if user.is_authenticated %}
+
+<h3>Discover peers</h3>
+<div id="results"></div>
+{% else %}
+<p>You are not logged in, please register or log in.</p>
+{% endif %}
+
+<script>
+  const req = new XMLHttpRequest();
+  req.onreadystatechange = function () {
+    if (req.readyState === 4) {
+      console.log("Got Data");
+      html = "";
+      // html = '<div class="image-grid container">';
+      html = "";
+
+      data = JSON.parse(req.response);
+      if (data.length < 1) {
+        html += `<p>There were no users found</p>`;
+      }
+      data.forEach(function (obj) {
+        html += `
+          
+        <div class="card" style="width: 18rem; margin:10px;">
+        <!-- <img class="card-img-top" src="..." alt="Card image cap" /> -->
+        <div class="card-body">
+          <h5 class="card-title">${obj.user.username}</h5>
+          <!-- <p class="card-text">
+            Some quick example text to build on the card title and make up the bulk of
+            the card's content.
+          </p> -->
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">${obj.user.first_name}</li>
+          <li class="list-group-item">${obj.user.last_name}</li>
+          <li class="list-group-item">${obj.organisation}</li>
+          <li class="list-group-item">${obj.user.date_joined}</li>
+        </ul>
+        <div class="card-body">
+          <div class="alert alert-primary" role="alert">
+            <h4 class="alert-heading">Status</h4>
+            <hr />
+            <p class="mb-0">${obj.status}</p>
+          </div>
+        </div>
+      </div>
+          
+          `;
+      });
+      // html += "</div>";
+      document.getElementById("results").innerHTML = html;
+    }
+  };
+  req.open("GET", `/api/users/all`);
+  req.send();
+</script>
+
+<style>
+  #results {
+    display: flex;
+    flex-wrap: wrap;
+  }
+</style>
+
+{% endblock %}

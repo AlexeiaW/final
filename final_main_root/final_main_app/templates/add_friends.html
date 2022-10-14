@@ -1,0 +1,60 @@
+{% extends "./base.html" %} {% block content %} {% if user.is_authenticated %}
+
+<h3>Search for users by name to add them.</h3>
+<form id="search_form" onsubmit="searchUsers(event)">
+  {% csrf_token %} Username:
+  <input
+    type="text"
+    name="username"
+    value=""
+    placeholder="Leave empty to get all users"
+    size="50"
+  />
+  <button type="submit">Search</button>
+</form>
+
+<div id="results"></div>
+{% else %}
+<p>You are not logged in, please register or log in.</p>
+{% endif %}
+
+<script>
+  function searchUsers(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const formProps = Object.fromEntries(formData);
+    console.log(formProps);
+    const req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+      if (req.readyState === 4) {
+        console.log("Got Data");
+        html = "";
+        // html = '<div class="image-grid container">';
+        html = "<h3>Your search results</h3>";
+
+        data = JSON.parse(req.response);
+        if (data.length < 1) {
+          html += `<p>There were no users found with user name ${formProps.username}</p>`;
+        }
+        data.forEach(function (obj) {
+          html += `
+          
+          <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">${obj.user.username}</h5>
+              <a href="/add-friend/${obj.user.username}" class="card-link">Add friend</a>
+            </div>
+          </div>
+          
+          `;
+        });
+        // html += "</div>";
+        document.getElementById("results").innerHTML = html;
+      }
+    };
+    req.open("GET", `/api/search-users?username=${formProps.username}`);
+    req.send();
+  }
+</script>
+
+{% endblock %}

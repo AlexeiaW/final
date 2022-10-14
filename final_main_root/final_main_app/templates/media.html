@@ -1,0 +1,48 @@
+{% extends "./base.html" %} {% block content %}
+<div id="images"></div>
+<br />
+
+<h3>Upload media</h3>
+<!-- images -->
+<div class="container">
+  <div id="input">
+    <form
+      action="/api/image/"
+      method="post"
+      class="form"
+      enctype="multipart/form-data"
+    >
+      {% csrf_token %}
+      <label for="name">Name of image:</label><br />
+      <input type="text" id="name" name="name" /><br /><br />
+      <label for="image">Upload Image:</label><br />
+      <input type="file" id="image" name="image" /><br /><br />
+      <input type="submit" value="Submit" />
+    </form>
+  </div>
+</div>
+
+<script>
+  setInterval(function () {
+    console.log("Hey");
+    const req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+      if (req.readyState === 4) {
+        console.log("Got Data");
+        html = "";
+        // html = '<div class="image-grid container">';
+        html = "<h3>Your images</h3>";
+
+        data = JSON.parse(req.response);
+        data.forEach(function (obj) {
+          html += '<div><img src="' + obj.thumbnail + '" class="item"> </div>';
+        });
+        // html += "</div>";
+        document.getElementById("images").innerHTML = html;
+      }
+    };
+    req.open("GET", "/api/images/");
+    req.send();
+  }, 5000);
+</script>
+{% endblock %}

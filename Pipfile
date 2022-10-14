@@ -1,0 +1,24 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+autopep8 = "*"
+django = "==4.0.6"
+django-extensions = "*"
+djangorestframework = "*"
+django-bootstrap4 = "*"
+celery = {version = "==5.0.5", extras = ["redis"]}
+redis = "==3.5.3"
+gevent = "*"
+pillow = "*"
+channels = "*"
+channels-redis = "*"
+django-seed = "*"
+psycopg2-binary = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
