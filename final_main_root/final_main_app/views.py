@@ -62,6 +62,10 @@ def addFriends(request):
 def discover(request):
     return render(request, 'discover.html')
 
+
+def profile(request):
+    return render(request, 'profile.html')
+
 # Media view, only if login true
 
 
@@ -113,7 +117,7 @@ def myFriends(request):
 # Password change view, render password change form and process submission of the form
 
 
-def profile(request):
+def resetPassword(request):
     """View function for the user profile, profile.html."""
     # Get the current user's user object
     # user = request.user
@@ -133,11 +137,12 @@ def profile(request):
             return HttpResponseRedirect('../')
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'profile.html', {
+    return render(request, 'reset_password.html', {
         'form': form,
         # 'current_user': current_user_name,
         # 'user_avatar': current_user_avatar
     })
+
 
 # Register view, register form and process form submission
 

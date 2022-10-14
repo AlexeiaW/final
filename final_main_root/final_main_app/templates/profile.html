@@ -1,9 +1,9 @@
 {% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
-<h1>Reset Password</h1>
 
-<form id="form" method="post" action="/profile/" enctype="multipart/form-data">
-  {% csrf_token %} {{ form.as_p }}
+<h1>Hello {{ user.username }} <span class="sr-only">(current)</span></h1>
 
-  <input type="submit" name="submit" value="Change" />
-</form>
+<a class="nav-link" href="/reset-password/">Reset password</a>
+<a class="nav-link" href="/media/">Add profile photo</a>
+<a class="nav-link" href="/update/">Update profile details</a>
+
 {% endblock %}

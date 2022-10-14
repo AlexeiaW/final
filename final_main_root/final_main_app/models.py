@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # The Model that is used to add data to the auth user model. AppUser is mainly used as the "user" and will create relationships between friends
+
+
 class AppUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
@@ -20,6 +22,8 @@ class AppUser(models.Model):
         return self.user.username
 
 # Image model to store image information
+
+
 class Image(models.Model):
     name = models.CharField(max_length=256, unique=True, db_index=True)
     image = models.FileField(blank=False)
@@ -30,5 +34,13 @@ class Image(models.Model):
     def __str__(self):
         return self.name
 
+# Group model to store user groups
 
 
+class Group(models.Model):
+    name = models.CharField(max_length=256, unique=True, db_index=True)
+    description = models.TextField(null=True, blank=True)
+    user = models.ManyToManyField(AppUser)
+
+    def __str__(self):
+        return self.name
