@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.forms.models import model_to_dict
-
+from django.views.generic import DetailView
 # Update user
 
 
@@ -180,6 +180,10 @@ def myGroups(request):
         'appuser': request.user.appuser
     })
 
+
+class GroupDetail(DetailView):
+    model = Group
+    template_name = 'group.html'
 
 # Password change view, render password change form and process submission of the form
 
