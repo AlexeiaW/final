@@ -37,4 +37,6 @@ urlpatterns = [
          (views.myFriends), name='my_friends'),
     path('my-groups/', login_required(login_url='../login/')
          (views.myGroups), name='my_groups'),
+    path('create-group/', views.createGroup, name='create_group'),
+
 ]

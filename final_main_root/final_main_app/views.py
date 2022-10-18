@@ -1,3 +1,4 @@
+from ast import And
 from django.shortcuts import render
 from django.contrib import messages
 from .forms import *
@@ -41,6 +42,33 @@ def appuserUpdate(request):
     return render(request, 'appuser_update_form.html',
                   {'user_form': user_form,
                    'profile_form': profile_form})
+
+
+def createGroup(request):
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return render(request, 'index.html')
+
+        form = GroupForm(data=request.POST)
+        if form.is_valid():
+            groupForm = form.save()
+
+            appuser = AppUser.objects.get(id=request.user.appuser.id)
+
+            # This is the group the authenticated user wants to connect with
+            group = Group.objects.get(pk=groupForm.pk)
+
+            appuser.groups.add(group)
+            appuser.save()
+
+            messages.success(request,
+                             'Your group was successfully created!',
+                             extra_tags='alert-success')
+            return HttpResponseRedirect('/my-groups/')
+    else:
+        return render(request, 'create_group.html', {
+            'form': GroupForm(),
+        })
 
 
 def index(request):
@@ -124,7 +152,7 @@ def joinGroup(request, group_name):
     # This is the authenticated user, who is initiating the group connection
     appuser = AppUser.objects.get(id=request.user.appuser.id)
 
-    # This is the friend the authenticated user wants to connect with
+    # This is the group the authenticated user wants to connect with
     group = Group.objects.get(name__exact=group_name)
 
     appuser.groups.add(group)
