@@ -66,6 +66,9 @@ def discover(request):
 def profile(request):
     return render(request, 'profile.html')
 
+
+def friends(request):
+    return render(request, 'friends.html')
 # Media view, only if login true
 
 

@@ -10,6 +10,7 @@ urlpatterns = [
     path('discover/', login_required(login_url='../login/')
          (views.discover), name='discover'),
     path('profile/', views.profile, name='profile'),
+    path('friends/', views.friends, name='profile'),
     path('reset-password/', views.resetPassword, name='resetPassword'),
     path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),

@@ -44,3 +44,12 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Chat(models.Model):
+    name = models.CharField(max_length=256, unique=True, db_index=True)
+    description = models.TextField(null=True, blank=True)
+    group = models.OneToOneField(Group, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
