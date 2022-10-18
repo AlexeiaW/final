@@ -7,7 +7,7 @@
   </tr>
   {% for group in appuser.groups.all %}
   <tr>
-    <td>{{group}}</td>
+    <td><a href="/group/{{group.pk}}">{{group}}</a></td>
   </tr>
   {% endfor %}
 </table>
