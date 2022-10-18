@@ -14,12 +14,15 @@ from rest_framework import status
 from rest_framework import generics
 from rest_framework import mixins, filters
 
+
 @api_view(['GET'])
 def helloworld(request, **kwargs):
     if request.method == 'GET':
         return Response({'coverage': 'hi'}, status=status.HTTP_200_OK)
 
 # Get an individual image
+
+
 class ImageDetail(mixins.CreateModelMixin,  generics.GenericAPIView):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
@@ -43,28 +46,50 @@ class ImageList(generics.ListAPIView):
     serializer_class = ImageListSerializer
 
     def get_queryset(self):
-            """
-            Restricts the returned iamges to a given user,
-            by filtering against a `user` in request.
-            """
-            queryset =  self.request.user.appuser.images
-            return queryset
+        """
+        Restricts the returned iamges to a given user,
+        by filtering against a `user` in request.
+        """
+        queryset = self.request.user.appuser.images
+        return queryset
 
 # Get a list of users through api, based on search criteria from the client. The search will be based on the username
+
+
 class UsersAPIView(generics.ListCreateAPIView):
     serializer_class = AppUserSerializer
+
     def get_queryset(self):
-            """
-            Optionally restricts the returned a given user,
-            by filtering against a `username` query parameter in the URL.
-            """
-            queryset = AppUser.objects.all()
-            username = self.request.query_params.get('username')
-            if username is not None:
-                queryset = queryset.filter(user__username__icontains=username)
-            return queryset
+        """
+        Optionally restricts the returned a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = AppUser.objects.all()
+        username = self.request.query_params.get('username')
+        if username is not None:
+            queryset = queryset.filter(user__username__icontains=username)
+        return queryset
+
+# Get a list of groups through api, based on search criteria from the client. The search will be based on the group name
+
+
+class GroupsAPIView(generics.ListCreateAPIView):
+    serializer_class = GroupListSerializer
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned a given user,
+        by filtering against a `groupname` query parameter in the URL.
+        """
+        queryset = Group.objects.all()
+        groupname = self.request.query_params.get('groupname')
+        if groupname is not None:
+            queryset = queryset.filter(name__icontains=groupname)
+        return queryset
 
 # Get a list of all the users in the system as an array of json objects
+
+
 class AllUsersAPIView(generics.ListCreateAPIView):
     serializer_class = HomePagesAppUserSerializer
     queryset = AppUser.objects.all()

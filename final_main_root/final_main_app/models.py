@@ -38,16 +38,16 @@ class Image(models.Model):
 
 
 class Group(models.Model):
-    name = models.CharField(max_length=256, unique=True, db_index=True)
+    name = models.CharField(max_length=30, unique=False, db_index=True)
     description = models.TextField(null=True, blank=True)
-    user = models.ManyToManyField(AppUser)
+    users = models.ManyToManyField(AppUser, related_name='groups')
 
     def __str__(self):
         return self.name
 
 
 class Chat(models.Model):
-    name = models.CharField(max_length=256, unique=True, db_index=True)
+    name = models.CharField(max_length=30, unique=False, db_index=True)
     description = models.TextField(null=True, blank=True)
     group = models.OneToOneField(Group, on_delete=models.CASCADE)
 

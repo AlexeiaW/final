@@ -1,0 +1,14 @@
+{% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
+
+<h1>Your groups</h1>
+<table>
+  <tr>
+    <th>Group name</th>
+  </tr>
+  {% for group in appuser.groups.all %}
+  <tr>
+    <td>{{group}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

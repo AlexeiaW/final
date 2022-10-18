@@ -56,6 +56,11 @@ def index(request):
 def addFriends(request):
     return render(request, 'add_friends.html')
 
+
+def joinGroupSearch(request):
+    return render(request, 'join_group.html')
+
+
 # Render discover peers template
 
 
@@ -69,6 +74,10 @@ def profile(request):
 
 def friends(request):
     return render(request, 'friends.html')
+
+
+def groups(request):
+    return render(request, 'groups.html')
 # Media view, only if login true
 
 
@@ -110,12 +119,39 @@ def addFriend(request, friend_username):
     return HttpResponseRedirect('/my-friends/')
 
 
+@login_required
+def joinGroup(request, group_name):
+    # This is the authenticated user, who is initiating the group connection
+    appuser = AppUser.objects.get(id=request.user.appuser.id)
+
+    # This is the friend the authenticated user wants to connect with
+    group = Group.objects.get(name__exact=group_name)
+
+    appuser.groups.add(group)
+    appuser.save()
+
+    messages.success(request,
+                     'Group successfully joined!',
+                     extra_tags='alert-success')
+
+    return HttpResponseRedirect('/my-groups/')
+
 # Returns a list of user friends
+
+
 @login_required
 def myFriends(request):
     return render(request, 'my-friends.html', {
         'appuser': request.user.appuser
     })
+
+
+@login_required
+def myGroups(request):
+    return render(request, 'my-groups.html', {
+        'appuser': request.user.appuser
+    })
+
 
 # Password change view, render password change form and process submission of the form
 
