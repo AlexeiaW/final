@@ -17,6 +17,7 @@ channels = "*"
 channels-redis = "*"
 django-seed = "*"
 psycopg2-binary = "*"
+django-quill-editor = "*"
 
 [dev-packages]
 
