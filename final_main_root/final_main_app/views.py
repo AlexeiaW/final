@@ -61,6 +61,8 @@ def createGroup(request):
             appuser.groups.add(group)
             appuser.save()
 
+            chat = Chat.objects.create(group=group)
+
             messages.success(request,
                              'Your group was successfully created!',
                              extra_tags='alert-success')

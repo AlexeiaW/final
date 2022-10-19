@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+import uuid
 # The Model that is used to add data to the auth user model. AppUser is mainly used as the "user" and will create relationships between friends
 
 
@@ -47,9 +47,13 @@ class Group(models.Model):
 
 
 class Chat(models.Model):
-    name = models.CharField(max_length=30, unique=False, db_index=True)
-    description = models.TextField(null=True, blank=True)
     group = models.OneToOneField(Group, on_delete=models.CASCADE)
 
+    # This field is universally unique, and will ensure chat rooms are unique for those who create them
+    room_id = models.UUIDField(
+        primary_key=False,
+        default=uuid.uuid4,
+        editable=False)
+
     def __str__(self):
-        return self.name
+        return self.room_id.hex
