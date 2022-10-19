@@ -4,6 +4,32 @@
 <p>{{group.description}}</p>
 
 <h2>Chat room</h2>
-<button type="button" class="btn btn-primary">Room</button>
 
+<p>Click <a id="room_url" href="/chat/{{group.chat}}/">here</a> to enter the group chat room.</p>
+
+<p>You can also copy the link to the chat room and share it with others to join the chat room for this group.</p>
+
+<div class="row">
+    <div class="col">
+        <input class="form-control" type="text" value="{{ request.get_host }}/chat/{{group.chat}}/" id="myInput">
+    </div>
+    <div class="col">
+        <button type="button" class="btn btn-primary" onclick="myFunction()">Copy chat room link</button>
+    </div>
+</div>
+
+<script>
+    function myFunction() {
+        // Get the text field
+        var copyText = document.getElementById("myInput");
+
+        // Select the text field
+        copyText.select();
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText.value).then(function (x) {
+            alert("Link copied to clipboard: " + copyText.value);
+        });
+    }
+</script>
 {% endblock %}
