@@ -73,6 +73,39 @@ def createGroup(request):
         })
 
 
+def createStory(request):
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return render(request, 'index.html')
+
+        form = StoryForm(data=request.POST)
+        if form.is_valid():
+
+            # TODO
+            # appuser = AppUser.objects.get(id=request.user.appuser.id)
+            # form.author = appuser
+            # storyForm = form.save()
+
+            # # This is the group the authenticated user wants to connect with
+            # story = Story.objects.get(pk=storyForm.pk)
+
+            # breakpoint()
+            # appuser.category.add(group)
+            # appuser.save()
+
+            # chat = Chat.objects.create(group=group)
+
+            messages.success(request,
+                             'Your story was successfully created!',
+                             extra_tags='alert-success')
+            return HttpResponseRedirect('/my-stories/')
+    else:
+        return render(request, 'create_story.html', {
+            'form': StoryForm(),
+            'category_form': CategoryForm()
+        })
+
+
 def index(request):
     if not request.user.is_authenticated:
         return render(request, 'index.html')
@@ -85,6 +118,10 @@ def index(request):
 # Render add friends template
 def addFriends(request):
     return render(request, 'add_friends.html')
+
+
+def storiesIndex(request):
+    return render(request, 'stories_index.html')
 
 
 def joinGroupSearch(request):

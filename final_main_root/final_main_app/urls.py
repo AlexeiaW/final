@@ -39,5 +39,7 @@ urlpatterns = [
          (views.myGroups), name='my_groups'),
     path('group/<int:pk>', views.GroupDetail.as_view(), name='group'),
     path('create-group/', views.createGroup, name='create_group'),
+    path('create-story/', views.createStory, name='create_story'),
+    path('stories-index/', views.storiesIndex, name='create_index'),
 
 ]

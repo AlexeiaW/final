@@ -1,6 +1,12 @@
+# from asyncio.windows_events import NULL
+from email.policy import default
+from queue import Empty
+from unicodedata import category
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from django_quill.fields import QuillField
+
 # The Model that is used to add data to the auth user model. AppUser is mainly used as the "user" and will create relationships between friends
 
 
@@ -57,3 +63,28 @@ class Chat(models.Model):
 
     def __str__(self):
         return self.room_id.hex
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Story(models.Model):
+    title = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, unique=True)
+    author = models.ForeignKey(
+        AppUser, on_delete=models.CASCADE, related_name='stories')
+    updated_on = models.DateTimeField(auto_now=True)
+    content = QuillField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, related_name='stories', default=None)
+
+    class Meta:
+        ordering = ['-created_on']
+
+    def __str__(self):
+        return self.title

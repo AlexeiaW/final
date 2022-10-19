@@ -29,3 +29,23 @@ class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
         fields = ('name', 'description')
+
+
+class StoryForm(forms.ModelForm):
+    class Meta:
+        model = Story
+        fields = ('title', 'content')
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ('name',)
+        labels = {
+            "name": "Tag"
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryForm, self).__init__(*args, **kwargs)
+        self.fields['name'] = forms.ModelChoiceField(
+            queryset=Category.objects.all(), empty_label="Choose a category", label='Category')

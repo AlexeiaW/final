@@ -1,0 +1,11 @@
+{% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
+
+<h1>Hello {{ user.username }} <span class="sr-only">(current)</span></h1>
+<h3>Create a story</h3>
+
+<form id="form" method="post" action="/create-story/" enctype="multipart/form-data">
+  {% csrf_token %} {{ form.as_p }} {{category_form}}
+
+  <input type="submit" name="submit" value="Create" />
+</form>
+{% endblock %}
