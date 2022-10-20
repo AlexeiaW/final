@@ -221,6 +221,16 @@ def myStories(request):
     })
 
 
+@login_required
+def exploreStories(request):
+    # breakpoint()
+    return render(request, 'explore-stories.html', {
+        'appuser': request.user.appuser,
+        'categories': Category.objects.all(),
+        'stories':  Story.objects.all(),
+    })
+
+
 class GroupDetail(DetailView):
     model = Group
     template_name = 'group.html'
