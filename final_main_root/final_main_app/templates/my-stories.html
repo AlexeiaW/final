@@ -1,0 +1,14 @@
+{% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
+
+<h1>Your stories</h1>
+<table>
+  <tr>
+    <th>Story name</th>
+  </tr>
+  {% for story in appuser.author.author_stories.all %}
+  <tr>
+    <td><a href="/story/{{story.pk}}">{{story}}</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

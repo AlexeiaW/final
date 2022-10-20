@@ -1,6 +1,7 @@
 # from asyncio.windows_events import NULL
 from email.policy import default
 from queue import Empty
+import re
 from unicodedata import category
 from django.db import models
 from django.contrib.auth.models import User
@@ -35,7 +36,7 @@ class Image(models.Model):
     image = models.FileField(blank=False)
     thumbnail = models.FileField(null=True)
     user = models.ForeignKey(
-        AppUser, related_name='images', on_delete=models.CASCADE)
+        AppUser, related_name='images', on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return self.name
@@ -67,21 +68,31 @@ class Chat(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(null=True, blank=True, default=None)
 
     def __str__(self):
         return self.name
+
+
+class Author(models.Model):
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    user = models.OneToOneField(AppUser, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.first_name
 
 
 class Story(models.Model):
     title = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
     author = models.ForeignKey(
-        AppUser, on_delete=models.CASCADE, related_name='stories')
+        Author, on_delete=models.CASCADE, related_name='author_stories')
     updated_on = models.DateTimeField(auto_now=True)
     content = QuillField()
     created_on = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, related_name='stories', default=None)
+        Category, on_delete=models.CASCADE, related_name='category_stories')
 
     class Meta:
         ordering = ['-created_on']

@@ -41,5 +41,9 @@ urlpatterns = [
     path('create-group/', views.createGroup, name='create_group'),
     path('create-story/', views.createStory, name='create_story'),
     path('stories-index/', views.storiesIndex, name='create_index'),
+    path('my-stories/', login_required(login_url='../login/')
+         (views.myStories), name='my_stories'),
+    path('story/<int:pk>', views.GroupDetail.as_view(), name='group'),
+
 
 ]

@@ -1,0 +1,7 @@
+{% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
+
+<h1>{{story.title}}</h1>
+<p>Author {{story.author.first_name}}</p>
+<p>{{story.content.html|safe}}</p>
+
+{% endblock %}

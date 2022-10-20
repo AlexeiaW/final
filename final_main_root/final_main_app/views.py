@@ -78,22 +78,16 @@ def createStory(request):
         if not request.user.is_authenticated:
             return render(request, 'index.html')
 
-        form = StoryForm(data=request.POST)
-        if form.is_valid():
-
-            # TODO
-            # appuser = AppUser.objects.get(id=request.user.appuser.id)
-            # form.author = appuser
-            # storyForm = form.save()
-
-            # # This is the group the authenticated user wants to connect with
-            # story = Story.objects.get(pk=storyForm.pk)
-
-            # breakpoint()
-            # appuser.category.add(group)
-            # appuser.save()
-
-            # chat = Chat.objects.create(group=group)
+        storyForm = StoryForm(data=request.POST)
+        if storyForm.is_valid():
+            appuser = AppUser.objects.get(id=request.user.appuser.id)
+            storyForm.instance.author = appuser.author
+            storyForm.cleaned_data['slug'] = storyForm.cleaned_data['title'].lower(
+            )
+            story = storyForm.save(commit=False)
+            story.slug = storyForm.cleaned_data['title'].lower(
+            )
+            story.save()
 
             messages.success(request,
                              'Your story was successfully created!',
@@ -101,8 +95,7 @@ def createStory(request):
             return HttpResponseRedirect('/my-stories/')
     else:
         return render(request, 'create_story.html', {
-            'form': StoryForm(),
-            'category_form': CategoryForm()
+            'form': StoryForm()
         })
 
 
@@ -220,10 +213,22 @@ def myGroups(request):
     })
 
 
+@login_required
+def myStories(request):
+    # breakpoint()
+    return render(request, 'my-stories.html', {
+        'appuser': request.user.appuser
+    })
+
+
 class GroupDetail(DetailView):
     model = Group
     template_name = 'group.html'
 
+
+class GroupDetail(DetailView):
+    model = Story
+    template_name = 'story.html'
 # Password change view, render password change form and process submission of the form
 
 
@@ -275,6 +280,13 @@ def register(request):
                 profile.organisation = request.DATA['organisation']
 
             profile.save()
+
+            author = Author(
+                user=profile, first_name=profile.user.first_name, last_name=profile.user.last_name)
+            author.save()
+            profile.author = author
+            profile.save()
+
             registered = True
         else:
             print(user_form.errors, profile_form.errors)

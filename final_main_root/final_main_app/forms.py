@@ -32,20 +32,23 @@ class GroupForm(forms.ModelForm):
 
 
 class StoryForm(forms.ModelForm):
+    category = forms.ModelChoiceField(queryset=Category.objects.all(
+    ), empty_label="Choose a category", label='Category')
+
     class Meta:
         model = Story
-        fields = ('title', 'content')
+        fields = ('title', 'content', 'category')
 
 
-class CategoryForm(forms.ModelForm):
-    class Meta:
-        model = Category
-        fields = ('name',)
-        labels = {
-            "name": "Tag"
-        }
+# class CategoryForm(forms.ModelForm):
+#     name = forms.ModelChoiceField(queryset=Category.objects.all(
+#     ), empty_label="Choose a category", label='Category')
 
-    def __init__(self, *args, **kwargs):
-        super(CategoryForm, self).__init__(*args, **kwargs)
-        self.fields['name'] = forms.ModelChoiceField(
-            queryset=Category.objects.all(), empty_label="Choose a category", label='Category')
+#     class Meta:
+#         model = Category
+#         fields = ('name',)
+
+    # def __init__(self, *args, **kwargs):
+    #     super(CategoryForm, self).__init__(*args, **kwargs)
+    #     self.fields['name'] = forms.ModelChoiceField(
+    #         queryset=Category.objects.all(), empty_label="Choose a category", label='Category')
