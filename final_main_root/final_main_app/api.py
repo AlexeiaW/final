@@ -6,7 +6,7 @@ from .serializers import *
 from .tasks import *
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
-
+from django.db.models import Q
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -70,6 +70,21 @@ class UsersAPIView(generics.ListCreateAPIView):
             queryset = queryset.filter(user__username__icontains=username)
         return queryset
 
+
+class StoriesAPIView(generics.ListCreateAPIView):
+    serializer_class = StoryListSerializer
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = Story.objects.all()
+        search_query = self.request.query_params.get('search_query')
+        if search_query is not None:
+            queryset = queryset.filter(
+                Q(title__icontains=search_query) | Q(description__icontains=search_query) | Q(content__icontains=search_query))
+        return queryset
 # Get a list of groups through api, based on search criteria from the client. The search will be based on the group name
 
 
