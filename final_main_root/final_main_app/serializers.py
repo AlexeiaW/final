@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
-        fields = ['name', 'image']
+        fields = ['name', 'image', 'thumbnail']
 
 
 class ImageListSerializer(serializers.ModelSerializer):
@@ -65,6 +65,9 @@ class AppUserSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data["user"] = UserSerializer(instance.user).data
+        # data["images"] = ImageListSerializer(instance.images).data
+        data["image"] = ImageListSerializer(instance.images.first()).data
+        # breakpoint()
         return data
 
 

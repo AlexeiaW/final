@@ -3,13 +3,7 @@
 <h3>Search for users by name to add them.</h3>
 <form id="search_form" onsubmit="searchUsers(event)">
   {% csrf_token %} Username:
-  <input
-    type="text"
-    name="username"
-    value=""
-    placeholder="Leave empty to get all users"
-    size="50"
-  />
+  <input type="text" name="username" value="" placeholder="Leave empty to get all users" size="50" />
   <button type="submit">Search</button>
 </form>
 
@@ -38,10 +32,11 @@
         }
         data.forEach(function (obj) {
           html += `
-          
-          <div class="card" style="width: 18rem;">
+          <div class="card" style="width:fit-content;">
+            <img class="mx-auto" src="${obj.image.thumbnail}" alt="Card image cap">
             <div class="card-body">
               <h5 class="card-title">${obj.user.username}</h5>
+              <p class="item">${obj.user.first_name} ${obj.user.last_name}</p>
               <a href="/add-friend/${obj.user.username}" class="card-link">Add friend</a>
             </div>
           </div>
