@@ -28,6 +28,33 @@ class GroupListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class AuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Author
+        fields = '__all__'
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
+class StoryListSerializer(serializers.ModelSerializer):
+    created_on = serializers.DateTimeField(format="%d-%m-%Y")
+
+    class Meta:
+        model = Story
+        fields = ["pk", "author", "category", "created_on",
+                  "description", "slug", "title", "updated_on"]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["author"] = AuthorSerializer(instance.author).data
+        data["category"] = CategorySerializer(instance.category).data
+        return data
+
+
 class AppUserSerializer(serializers.ModelSerializer):
     user = User
 

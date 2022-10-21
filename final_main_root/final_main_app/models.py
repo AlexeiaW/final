@@ -84,7 +84,8 @@ class Author(models.Model):
 
 
 class Story(models.Model):
-    title = models.CharField(max_length=200, unique=True)
+    title = models.CharField(max_length=80)
+    description = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     author = models.ForeignKey(
         Author, on_delete=models.CASCADE, related_name='author_stories')

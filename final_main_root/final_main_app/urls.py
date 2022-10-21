@@ -46,5 +46,6 @@ urlpatterns = [
     path('story/<int:pk>', views.GroupDetail.as_view(), name='group'),
     path('explore-stories/', login_required(login_url='../login/')
          (views.exploreStories), name='explore_stories'),
-
+    path('api/search-stories/', api.StoriesAPIView.as_view(),
+         name='search_stories_api'),
 ]
