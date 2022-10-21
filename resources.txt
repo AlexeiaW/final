@@ -1,3 +1,5 @@
 https://www.sankalpjonna.com/learn-django/the-right-way-to-use-a-manytomanyfield-in-django
 
 https://www.youtube.com/watch?v=mF5jzSXb1dc
+
+https://justdjango.com/blog/build-a-blog-with-django
