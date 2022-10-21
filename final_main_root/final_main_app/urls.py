@@ -43,7 +43,7 @@ urlpatterns = [
     path('stories-index/', views.storiesIndex, name='create_index'),
     path('my-stories/', login_required(login_url='../login/')
          (views.myStories), name='my_stories'),
-    path('story/<int:pk>', views.GroupDetail.as_view(), name='group'),
+    path('story/<int:pk>', views.StoryDetail.as_view(), name='group'),
     path('explore-stories/', login_required(login_url='../login/')
          (views.exploreStories), name='explore_stories'),
     path('api/search-stories/', api.StoriesAPIView.as_view(),

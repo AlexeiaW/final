@@ -236,7 +236,7 @@ class GroupDetail(DetailView):
     template_name = 'group.html'
 
 
-class GroupDetail(DetailView):
+class StoryDetail(DetailView):
     model = Story
     template_name = 'story.html'
 # Password change view, render password change form and process submission of the form

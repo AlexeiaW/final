@@ -7,7 +7,15 @@
   </tr>
   {% for friend in appuser.friends.all %}
   <tr>
-    <td>{{friend}}</td>
+    <td>
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">{{friend}}</h5>
+          <p class="card-title">{{friend.user.first_name}} {{friend.user.last_name}}</p>
+          <a href="/new-chat/" class="card-link">Chat</a>
+        </div>
+      </div>
+    </td>
   </tr>
   {% endfor %}
 </table>
