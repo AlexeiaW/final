@@ -64,15 +64,18 @@ class StoryForm(forms.ModelForm):
             self.fields[myField].widget.attrs['class'] = 'form-control'
 
 
-# class CategoryForm(forms.ModelForm):
-#     name = forms.ModelChoiceField(queryset=Category.objects.all(
-#     ), empty_label="Choose a category", label='Category')
+class QuestionForm(forms.ModelForm):
+    user = forms.ModelChoiceField(
+        widget=forms.HiddenInput,
+        queryset=AppUser.objects.all(),
+        disabled=True,
+    )
 
-#     class Meta:
-#         model = Category
-#         fields = ('name',)
+    class Meta:
+        model = Question
+        fields = ['title', 'question', 'user', ]
 
-    # def __init__(self, *args, **kwargs):
-    #     super(CategoryForm, self).__init__(*args, **kwargs)
-    #     self.fields['name'] = forms.ModelChoiceField(
-    #         queryset=Category.objects.all(), empty_label="Choose a category", label='Category')
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'

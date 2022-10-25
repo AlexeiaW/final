@@ -7,7 +7,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 from django_quill.fields import QuillField
-
+from django.urls.base import reverse
 # The Model that is used to add data to the auth user model. AppUser is mainly used as the "user" and will create relationships between friends
 
 
@@ -99,3 +99,33 @@ class Story(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Question(models.Model):
+    title = models.CharField(max_length=140)
+    question = models.TextField()
+    user = models.ForeignKey(AppUser,
+                             on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('question_detail', kwargs={'pk': self.id})
+
+    def can_accept_answers(self, user):
+        return user == self.user
+
+
+class Answer(models.Model):
+    answer = models.TextField()
+    user = models.ForeignKey(AppUser,
+                             on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    question = models.ForeignKey(to=Question,
+                                 on_delete=models.CASCADE)
+    accepted = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ('-created', )

@@ -4,11 +4,12 @@ from django.contrib import messages
 from .forms import *
 from .models import *
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.forms.models import model_to_dict
-from django.views.generic import DetailView
+from django.views.generic import DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Update user
 
 
@@ -343,3 +344,26 @@ def user_logout(request):
                      'Logout successful!',
                      extra_tags='alert-success')
     return HttpResponseRedirect('../')
+
+
+class AskQuestionView(LoginRequiredMixin, CreateView):
+    form_class = QuestionForm
+    template_name = 'ask_question.html'
+
+    def get_initial(self):
+        return {
+            'user': self.request.user.appuser.id
+        }
+
+    def form_valid(self, form):
+        action = self.request.POST.get('action')
+        if action == 'SAVE':
+            # save and redirect as usual.
+            return super().form_valid(form)
+        elif action == 'PREVIEW':
+            preview = Question(
+                question=form.cleaned_data['question'],
+                title=form.cleaned_data['title'])
+            ctx = self.get_context_data(preview=preview)
+            return self.render_to_response(context=ctx)
+        return HttpResponseBadRequest()

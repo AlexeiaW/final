@@ -3,6 +3,8 @@ from . import views
 from . import api
 from django.contrib.auth.decorators import login_required
 
+app_name = "final_project_app_name"
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('update/', login_required(login_url='../login/')
@@ -48,4 +50,5 @@ urlpatterns = [
          (views.exploreStories), name='explore_stories'),
     path('api/search-stories/', api.StoriesAPIView.as_view(),
          name='search_stories_api'),
+    path('ask-question/', views.AskQuestionView.as_view(), name='ask_question'),
 ]

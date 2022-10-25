@@ -1,0 +1,37 @@
+{% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
+
+<!-- <h1>Hello {{ user.username }} <span class="sr-only">(current)</span></h1> -->
+<!-- <h3>Ask a question</h3>
+
+<form id="form" method="post" action="/create-group/" enctype="multipart/form-data">
+  {% csrf_token %} {{ form.as_p }}
+
+  <input class="btn btn-primary" type="submit" name="submit" value="Create" />
+</form> -->
+
+<div class="col-md-12">
+  <h1>Ask a question</h1>
+  {% if preview %}
+  <div class="card question-preview">
+    <div class="card-header">
+      Question Preview
+    </div>
+    <div class="card-body">
+      <h1 class="card-title">{{ preview.title }}</h1>
+      {{ preview.question }}
+    </div>
+  </div>
+  {% endif %}
+
+  <form method="post">
+    {{ form }}
+    {% csrf_token %}
+    <button class="btn btn-primary" type="submit" name="action" value="PREVIEW">
+      Preview
+    </button>
+    <button class="btn btn-primary" type="submit" name="action" value="SAVE">
+      Ask!
+    </button>
+  </form>
+</div>
+{% endblock %}
