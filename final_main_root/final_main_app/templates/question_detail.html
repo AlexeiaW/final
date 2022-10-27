@@ -2,9 +2,9 @@
 
 
 {% block body %}
+{% if user.is_authenticated %}
 {% include "./display_question.html" %}
 {% include "./list_answers.html" %}
-{% if user.is_authenticated %}
 {% include "./post_answer.html" %}
 {% else %}
 <div>Login to post answers.</div>

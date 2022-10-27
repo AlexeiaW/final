@@ -1,13 +1,11 @@
 {% block content %}
 
-<div class="question">
-    <div class="meta col-sm-12">
-        <h1>{{ question.title }}</h1>
-        Asked by {{ question.user }} on {{ question.created }}
-    </div>
-
-    <div class="body col-sm-12">
-        {{ question.question }}
+<div class="card border-light mb-3">
+    <div class="card-header">{{ question.user }}</div>
+    <div class="card-body">
+        <h5 class="card-title">{{ question.title }}</h5>
+        <p class="card-text">{{question.question }}</p>
+        <footer><small>{{ question.created|date}}</small></footer>
     </div>
 </div>
 
