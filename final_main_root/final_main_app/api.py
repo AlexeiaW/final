@@ -102,6 +102,22 @@ class GroupsAPIView(generics.ListCreateAPIView):
             queryset = queryset.filter(name__icontains=groupname)
         return queryset
 
+
+class QuestionsAPIView(generics.ListCreateAPIView):
+    serializer_class = QuestionListSerializer
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = Question.objects.all()
+        search_query = self.request.query_params.get('search_query')
+        if search_query is not None:
+            queryset = queryset.filter(
+                Q(title__icontains=search_query) | Q(question__icontains=search_query))
+        return queryset
+
 # Get a list of all the users in the system as an array of json objects
 
 

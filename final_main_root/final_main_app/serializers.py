@@ -55,6 +55,20 @@ class StoryListSerializer(serializers.ModelSerializer):
         return data
 
 
+class QuestionListSerializer(serializers.ModelSerializer):
+    created = serializers.DateTimeField(format="%b. %d, %Y")
+
+    class Meta:
+        model = Question
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["user"] = AppUserSerializer(instance.user).data
+        # data["answers"] = AnswerSerializer(instance.answers).data
+        return data
+
+
 class AppUserSerializer(serializers.ModelSerializer):
     user = User
 
