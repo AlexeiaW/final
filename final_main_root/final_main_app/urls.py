@@ -3,7 +3,7 @@ from . import views
 from . import api
 from django.contrib.auth.decorators import login_required
 
-app_name = "final_project_app_name"
+app_name = "final_main_app"
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -50,5 +50,15 @@ urlpatterns = [
          (views.exploreStories), name='explore_stories'),
     path('api/search-stories/', api.StoriesAPIView.as_view(),
          name='search_stories_api'),
+    path('api/search-questions/', api.QuestionsAPIView.as_view(),
+         name='search_questions_api'),
     path('ask-question/', views.AskQuestionView.as_view(), name='ask_question'),
+    path('hub/', views.QuestionListView.as_view(), name='question-list'),
+    path('question/<int:pk>', views.QuestionDetailView.as_view(),
+         name='question_detail'),
+    path('question/<int:pk>/answer',
+         views.CreateAnswerView.as_view(), name='answer_question'),
+    path('question/<int:pk>/accept', views.UpdateAnswerAcceptanceView.as_view(),
+         name='update_answer_acceptance'),
+
 ]

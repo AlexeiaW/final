@@ -79,3 +79,41 @@ class QuestionForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for myField in self.fields:
             self.fields[myField].widget.attrs['class'] = 'form-control'
+
+
+class AnswerForm(forms.ModelForm):
+    user = forms.ModelChoiceField(
+        widget=forms.HiddenInput,
+        queryset=AppUser.objects.all(),
+        disabled=True,
+    )
+    question = forms.ModelChoiceField(
+        widget=forms.HiddenInput,
+        queryset=Question.objects.all(),
+        disabled=True,
+    )
+
+    class Meta:
+        model = Answer
+        fields = ['answer', 'user', 'question', ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'
+
+
+class AnswerAcceptanceForm(forms.ModelForm):
+    accepted = forms.BooleanField(
+        widget=forms.HiddenInput,
+        required=False,
+    )
+
+    class Meta:
+        model = Answer
+        fields = ['accepted', ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'

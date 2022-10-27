@@ -8,8 +8,11 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.forms.models import model_to_dict
-from django.views.generic import DetailView, CreateView
+from django.views.generic import DetailView, CreateView, UpdateView
+from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils import timezone
+
 # Update user
 
 
@@ -139,6 +142,8 @@ def friends(request):
 
 def groups(request):
     return render(request, 'groups.html')
+
+
 # Media view, only if login true
 
 
@@ -359,6 +364,9 @@ class AskQuestionView(LoginRequiredMixin, CreateView):
         action = self.request.POST.get('action')
         if action == 'SAVE':
             # save and redirect as usual.
+            messages.success(self.request,
+                             'Success!',
+                             extra_tags='alert-success')
             return super().form_valid(form)
         elif action == 'PREVIEW':
             preview = Question(
@@ -367,3 +375,82 @@ class AskQuestionView(LoginRequiredMixin, CreateView):
             ctx = self.get_context_data(preview=preview)
             return self.render_to_response(context=ctx)
         return HttpResponseBadRequest()
+
+
+class QuestionDetailView(DetailView):
+    model = Question
+    template_name = 'question_detail.html'
+
+    ACCEPT_FORM = AnswerAcceptanceForm(initial={'accepted': True})
+    REJECT_FORM = AnswerAcceptanceForm(initial={'accepted': False})
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx.update({
+            'answer_form': AnswerForm(initial={
+                'user': self.request.user.appuser.id,
+                'question': self.object.id,
+            })
+        })
+        if self.object.can_accept_answers(self.request.user):
+            ctx.update({
+                'accept_form': self.ACCEPT_FORM,
+                'reject_form': self.REJECT_FORM,
+            })
+        return ctx
+
+
+class QuestionListView(ListView):
+
+    model = Question
+    paginate_by = 100  # if pagination is desired
+    template_name = 'question_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
+class CreateAnswerView(LoginRequiredMixin, CreateView):
+    form_class = AnswerForm
+    template_name = 'create_answer.html'
+
+    def get_initial(self):
+        return {
+            'question': self.get_question().id,
+            'user': self.request.user.id,
+        }
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(question=self.get_question(),
+                                        **kwargs)
+
+    def get_success_url(self):
+        return self.object.question.get_absolute_url()
+
+    def form_valid(self, form):
+        action = self.request.POST.get('action')
+        if action == 'SAVE':
+            # save and redirect as usual.
+            return super().form_valid(form)
+        elif action == 'PREVIEW':
+            ctx = self.get_context_data(preview=form.cleaned_data['answer'])
+            return self.render_to_response(context=ctx)
+        return HttpResponseBadRequest()
+
+    def get_question(self):
+        return Question.objects.get(pk=self.kwargs['pk'])
+
+
+class UpdateAnswerAcceptanceView(LoginRequiredMixin, UpdateView):
+    form_class = AnswerAcceptanceForm
+    queryset = Answer.objects.all()
+    template_name = 'answer_form.html'
+
+    def get_success_url(self):
+        return self.object.question.get_absolute_url()
+
+    def form_invalid(self, form):
+        return HttpResponseRedirect(
+            redirect_to=self.object.question.get_absolute_url())
