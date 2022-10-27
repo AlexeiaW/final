@@ -1,10 +1,11 @@
 {% extends "./base.html" %} {% block content %} {% if user.is_authenticated %}
 
 <h3>Search for users by name to add them.</h3>
-<form id="search_form" onsubmit="searchUsers(event)">
+<form id="search_form" class="form-inline" onsubmit="searchUsers(event)">
   {% csrf_token %} Username:
-  <input type="text" name="username" value="" placeholder="Leave empty to get all users" size="50" />
-  <button type="submit">Search</button>
+  <input class="form-control" type="text" name="username" value="" placeholder="Leave empty to get all users"
+    size="50" />
+  <button class="btn btn-primary" type="submit">Search</button>
 </form>
 
 <div id="results"></div>

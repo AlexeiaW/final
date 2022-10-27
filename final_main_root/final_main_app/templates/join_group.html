@@ -1,10 +1,11 @@
 {% extends "./base.html" %} {% block content %} {% if user.is_authenticated %}
 
 <h3>Search for groups by name to add them.</h3>
-<form id="search_form" onsubmit="searchGroups(event)">
+<form id="search_form" class="form-inline" onsubmit="searchGroups(event)">
   {% csrf_token %} Group name:
-  <input type="text" name="groupname" value="" placeholder="Leave empty to get all groups" size="50" />
-  <button type="submit">Search</button>
+  <input class="form-control" type="text" name="groupname" value="" placeholder="Leave empty to get all groups"
+    size="50" />
+  <button class="btn btn-primary" type="submit">Search</button>
 </form>
 
 <div id="results"></div>

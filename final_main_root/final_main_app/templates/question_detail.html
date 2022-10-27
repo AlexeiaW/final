@@ -1,0 +1,14 @@
+{% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
+
+
+{% block body %}
+{% include "./display_question.html" %}
+{% include "./list_answers.html" %}
+{% if user.is_authenticated %}
+{% include "./post_answer.html" %}
+{% else %}
+<div>Login to post answers.</div>
+{% endif %}
+{% endblock %}
+
+{% endblock %}

@@ -1,0 +1,14 @@
+{% block content %}
+
+<div class="question">
+    <div class="meta col-sm-12">
+        <h1>{{ question.title }}</h1>
+        Asked by {{ question.user }} on {{ question.created }}
+    </div>
+
+    <div class="body col-sm-12">
+        {{ question.question }}
+    </div>
+</div>
+
+{% endblock %}
