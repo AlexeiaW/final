@@ -381,9 +381,6 @@ class QuestionDetailView(DetailView):
     model = Question
     template_name = 'question_detail.html'
 
-    ACCEPT_FORM = AnswerAcceptanceForm(initial={'accepted': True})
-    REJECT_FORM = AnswerAcceptanceForm(initial={'accepted': False})
-
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx.update({
@@ -392,11 +389,6 @@ class QuestionDetailView(DetailView):
                 'question': self.object.id,
             })
         })
-        if self.object.can_accept_answers(self.request.user):
-            ctx.update({
-                'accept_form': self.ACCEPT_FORM,
-                'reject_form': self.REJECT_FORM,
-            })
         return ctx
 
 
@@ -441,16 +433,3 @@ class CreateAnswerView(LoginRequiredMixin, CreateView):
 
     def get_question(self):
         return Question.objects.get(pk=self.kwargs['pk'])
-
-
-class UpdateAnswerAcceptanceView(LoginRequiredMixin, UpdateView):
-    form_class = AnswerAcceptanceForm
-    queryset = Answer.objects.all()
-    template_name = 'answer_form.html'
-
-    def get_success_url(self):
-        return self.object.question.get_absolute_url()
-
-    def form_invalid(self, form):
-        return HttpResponseRedirect(
-            redirect_to=self.object.question.get_absolute_url())

@@ -102,18 +102,3 @@ class AnswerForm(forms.ModelForm):
         for myField in self.fields:
             self.fields[myField].widget.attrs['class'] = 'form-control'
 
-
-class AnswerAcceptanceForm(forms.ModelForm):
-    accepted = forms.BooleanField(
-        widget=forms.HiddenInput,
-        required=False,
-    )
-
-    class Meta:
-        model = Answer
-        fields = ['accepted', ]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for myField in self.fields:
-            self.fields[myField].widget.attrs['class'] = 'form-control'

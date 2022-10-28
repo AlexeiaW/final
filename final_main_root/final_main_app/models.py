@@ -114,9 +114,6 @@ class Question(models.Model):
     def get_absolute_url(self):
         return reverse('final_main_app:question_detail', kwargs={'pk': self.id})
 
-    def can_accept_answers(self, user):
-        return user == self.user
-
 
 class Answer(models.Model):
     answer = models.TextField()
@@ -125,7 +122,8 @@ class Answer(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     question = models.ForeignKey(to=Question,
                                  on_delete=models.CASCADE)
-    accepted = models.BooleanField(default=False)
+    upvotes = models.IntegerField(default=0)
+    down_votes = models.IntegerField(default=0)
 
     class Meta:
         ordering = ('-created', )
