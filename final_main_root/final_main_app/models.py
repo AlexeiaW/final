@@ -66,8 +66,8 @@ class Chat(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=200, unique=True)
-    slug = models.SlugField(null=True, blank=True, default=None)
+    name = models.CharField(max_length=200, unique=True, db_index=True)
+    slug = models.SlugField(null=True, blank=True, default=None, db_index=True)
 
     def __str__(self):
         return self.name

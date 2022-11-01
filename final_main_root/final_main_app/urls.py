@@ -57,6 +57,7 @@ urlpatterns = [
     path('question/<int:pk>', views.QuestionDetailView.as_view(),
          name='question_detail'),
     path('question/<int:pk>/answer',
-         views.CreateAnswerView.as_view(), name='answer_question')
-
+         views.CreateAnswerView.as_view(), name='answer_question'),
+    path('category/<str:category_slug>/',
+         views.categoryStories, name='category_slug'),
 ]
