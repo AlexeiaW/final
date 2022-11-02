@@ -6,7 +6,7 @@
   {% for answer in question.answer_set.all %}
   <li class="list-group-item">
     <div class="col-sm-9 col-md-10">
-      <div class="body">{{ answer.answer }}</div>
+      <div class="body">{{ answer.answer.html|safe }}</div>
       <div class="meta font-weight-light">
         Answered by {{ answer.user }} on {{ answer.created|date }}
       </div>

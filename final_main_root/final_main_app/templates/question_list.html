@@ -17,10 +17,18 @@
     <a href="/question/{{question.id}}" class="list-group-item list-group-item-action ">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{question.title}}</h5>
-            <small>{{question.created | date}}</small>
+            <div>
+                <div class="row"><small>{{question.created | date}}</small></div>
+                <div class="row"><small>
+                        {% if question.answer_set.count > 0 %}
+                        {{question.answer_set.count}} answers
+                        {% else %}
+                        no answers
+                        {% endif %}
+                    </small></div>
+            </div>
         </div>
-        <p class="mb-1">{{question.question}}
-        </p>
+        <p class="mb-1">{{question.question.text|safe}}</p>
         <small>{{question.user}}</small>
     </a> {% empty %}
     <li>No questions yet.</li>

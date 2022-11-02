@@ -103,7 +103,7 @@ class Story(models.Model):
 
 class Question(models.Model):
     title = models.CharField(max_length=140)
-    question = models.TextField()
+    question = QuillField()
     user = models.ForeignKey(AppUser,
                              on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
@@ -116,8 +116,8 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    answer = models.TextField()
-    user = models.ForeignKey(AppUser,
+    answer = QuillField()
+    user = models.ForeignKey(AppUser, related_name='answers',
                              on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     question = models.ForeignKey(to=Question,
