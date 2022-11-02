@@ -96,3 +96,12 @@ class HomePagesAppUserSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         data["user"] = UserSerializer(instance.user).data
         return data
+
+
+class AnswerSerializer(serializers.ModelSerializer):
+    user = AppUser()
+    question = Question()
+
+    class Meta:
+        model = Answer
+        fields = '__all__'

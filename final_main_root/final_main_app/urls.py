@@ -60,4 +60,6 @@ urlpatterns = [
          views.CreateAnswerView.as_view(), name='answer_question'),
     path('category/<str:category_slug>/',
          views.categoryStories, name='category_slug'),
+    path('api/vote/', api.voteApi,
+         name='answer_vote'),
 ]

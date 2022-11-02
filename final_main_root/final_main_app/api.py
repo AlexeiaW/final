@@ -124,3 +124,22 @@ class QuestionsAPIView(generics.ListCreateAPIView):
 class AllUsersAPIView(generics.ListCreateAPIView):
     serializer_class = HomePagesAppUserSerializer
     queryset = AppUser.objects.all()
+
+
+@api_view(['PUT'])
+def voteApi(request, **kwargs):
+    if request.user.is_authenticated == False:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    if request.method == 'PUT':
+        data = request.data
+        answer = Answer.objects.get(pk=data['answer_pk'])
+
+        if data['vote_type'] == 'upvote':
+            answer.upvotes = answer.upvotes + 1
+        elif data['vote_type'] == 'downvote':
+            answer.down_votes = answer.down_votes + 1
+
+        answer.save()
+
+        return Response({'answer': answer.pk}, status=status.HTTP_200_OK)
