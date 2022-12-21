@@ -12,6 +12,7 @@ from django.views.generic import DetailView, CreateView, UpdateView
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
+from django.db.models import Count, Sum, F
 
 # Update user
 
@@ -107,8 +108,12 @@ def index(request):
     if not request.user.is_authenticated:
         return render(request, 'index.html')
     else:
+        users_sorted = AppUser.objects.all().order_by(
+            "-answers__upvotes").annotate(upvote_sum=Sum('answers__upvotes'))
+
         return render(request, 'index.html', {
-            'appuser': request.user.appuser
+            'appuser': request.user.appuser,
+            'users_sorted':  users_sorted
         })
 
 
