@@ -1,5 +1,5 @@
 import json
-from django.test import TestCase, RequestFactory
+from django.test import TestCase, RequestFactory, Client
 from django.urls import reverse
 from django.urls import reverse_lazy
 
@@ -40,21 +40,22 @@ class TestUserCanCreateImageAndViewListOfOwnImages(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class TestUserCanAddFriends(TestCase):
+class TestUserCanAddFriendsSuccessfully(TestCase):
     def setUp(self):
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
         appuser = AppUserFactory.create()
         friend1 = AppUserFactory.create()
-        friend2 = AppUserFactory.create()
         self.user = appuser.user
         self.friend1 = friend1
-        self.friend2 = friend2
+        self.good_url = reverse('final_main_app:add_friend', kwargs={
+                                'friend_username': friend1.user.username})
+        self.destination_url = '/my-friends/'
 
-    def test_details(self):
+    def test_add_friends_endpoint_redirect_success(self):
+
         # Create an instance of a GET request.
-        request = self.factory.get(
-            '/add-friend/', kwargs={'friend_username': self.friend2.user.username})
+        request = self.factory.get(self.good_url)
 
         # Add support django messaging framework
         setattr(request, 'session', 'session')
@@ -65,5 +66,36 @@ class TestUserCanAddFriends(TestCase):
         request.user = self.user
 
         # Use this syntax for class-based views.
-        response = addFriend(request, self.friend2.user.username)
-        self.assertEqual(response.status_code, 200)
+        response = addFriend(request, self.friend1.user.username)
+
+        response.client = Client()
+        self.assertRedirects(response, self.destination_url,
+                             target_status_code=302)
+
+    def test_add_friends_endpoint_friends_added(self):
+        # Initially user will have no friends
+        self.assertEqual(self.user.appuser.friends.count(), 0)
+
+        # Create an instance of a GET request.
+        request = self.factory.get(self.good_url)
+
+        # Add support django messaging framework
+        setattr(request, 'session', 'session')
+        setattr(request, '_messages', FallbackStorage(request))
+
+        # Recall that middleware are not supported. You can simulate a
+        # logged-in user by setting request.user manually.
+        request.user = self.user
+
+        # Use this syntax for class-based views.
+        response = addFriend(request, self.friend1.user.username)
+
+        # user should have one friend now, re-fetch user from DB
+        fresh_app_user = AppUser.objects.get(user=self.user)
+
+        response.client = Client()
+        self.assertRedirects(response, self.destination_url,
+                             target_status_code=302)
+
+        # check that user has one friend
+        self.assertEqual(fresh_app_user.friends.count(), 1)
