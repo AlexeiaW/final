@@ -8,11 +8,16 @@ from django.core.files import File
 
 from .models import *
 from django.contrib.auth.models import User
+import random
+import string
 
 
 class UserFactory(factory.django.DjangoModelFactory):
+    username = factory.Faker('user_name')
+
     class Meta:
         model = User
+
 
 class AppUserFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
@@ -35,8 +40,12 @@ class AppUserFactory(factory.django.DjangoModelFactory):
 
 class ImageFactory(factory.django.DjangoModelFactory):
     name = models.CharField(max_length=256, unique=True, db_index=True)
-    image = models.FileField(blank=False)
-    thumbnail = models.FileField(null=True)
+    image = factory.django.ImageField(
+        from_path='images/test.jpg')
+    thumbnail = factory.django.ImageField(
+        from_path='images/test.jpg')
+
     user = factory.SubFactory(AppUserFactory)
+
     class Meta:
         model = Image
