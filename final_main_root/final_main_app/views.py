@@ -166,8 +166,10 @@ def indexChat(request):
 
 
 def room(request, room_name):
+    chat = Chat.objects.get(room_id=room_name)
     return render(request, 'chat/room.html', {
-        'room_name': room_name
+        'room_name': room_name,
+        'group_name': chat.group
     })
 
 
