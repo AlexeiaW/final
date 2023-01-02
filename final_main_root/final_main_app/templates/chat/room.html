@@ -69,11 +69,11 @@
         <div class="direct-chat-msg">
             <div class="direct-chat-info clearfix">
               <span class="direct-chat-name pull-left">${data.username}</span>
-              <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
             </div>
             <img class="direct-chat-img" src="${data.thumbnail}" alt="Message User Image">
             <div class="direct-chat-text">
               ${data.message}
+              <small class="direct-chat-timestamp pull-right ml-4">${data.message_time_stamp}</small>
             </div>
         </div> 
           `;
@@ -521,6 +521,7 @@
     border: 1px solid #d2d6de;
     margin: 5px 0 0 50px;
     color: #444;
+    width: fit-content;
   }
 
   .direct-chat-text:after,
@@ -571,7 +572,7 @@
   }
 
   .direct-chat-info {
-    display: block;
+    display: flex;
     margin-bottom: 2px;
     font-size: 12px;
   }
@@ -582,6 +583,7 @@
 
   .direct-chat-timestamp {
     color: #999;
+    margin-left: auto;
   }
 
   .direct-chat-contacts-open .direct-chat-contacts {

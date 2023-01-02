@@ -2,6 +2,7 @@
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+from datetime import datetime
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -30,6 +31,7 @@ class ChatConsumer(WebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         user_profile_photo = self.user.appuser.images.first().thumbnail.url
+        now = datetime.now()
 
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
@@ -38,7 +40,8 @@ class ChatConsumer(WebsocketConsumer):
                 'type': 'chat_message',
                 'message': message,
                 'username': self.user.username,
-                'thumbnail': user_profile_photo
+                'thumbnail': user_profile_photo,
+                'message_time_stamp': now.strftime("%d/%m/%Y %H:%M:%S")
             }
         )
 
@@ -47,10 +50,12 @@ class ChatConsumer(WebsocketConsumer):
         message = event['message']
         username = event['username']
         user_profile_photo = event['thumbnail']
+        message_time_stamp = event['message_time_stamp']
 
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'message': message,
             'username': username,
-            'thumbnail': user_profile_photo
+            'thumbnail': user_profile_photo,
+            'message_time_stamp': message_time_stamp
         }))
