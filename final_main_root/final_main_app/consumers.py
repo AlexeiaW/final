@@ -41,7 +41,7 @@ class ChatConsumer(WebsocketConsumer):
                 'message': message,
                 'username': self.user.username,
                 'thumbnail': user_profile_photo,
-                'message_time_stamp': now.strftime("%d/%m/%Y %H:%M:%S")
+                'message_time_stamp': now.strftime("%d %B %H:%M")
             }
         )
 
@@ -51,11 +51,16 @@ class ChatConsumer(WebsocketConsumer):
         username = event['username']
         user_profile_photo = event['thumbnail']
         message_time_stamp = event['message_time_stamp']
+        if event['username'] == self.user.username:
+            own_message = True
+        else:
+            own_message = False
 
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'message': message,
             'username': username,
             'thumbnail': user_profile_photo,
-            'message_time_stamp': message_time_stamp
+            'message_time_stamp': message_time_stamp,
+            'own_message': own_message
         }))

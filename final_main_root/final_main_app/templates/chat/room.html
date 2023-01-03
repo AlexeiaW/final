@@ -7,7 +7,7 @@
 {{ room_name|json_script:"room-name" }}
 
 <!-- Chat section -->
-<div class="row bootstrap snippets ml-1 mr-1">
+<div class="row bootstrap snippets ml-1 mr-1 max-width-chat">
   <div class="box box-primary direct-chat direct-chat-primary">
 
     <!-- Box header -->
@@ -26,19 +26,7 @@
     </div>
     <div class="box-body">
       <!-- Conversations are loaded here -->
-      <div class="direct-chat-messages" id="direct-chat-messages">
-        <!-- Message to the right -->
-        <!-- <div class="direct-chat-msg right">
-          <div class="direct-chat-info clearfix">
-            <span class="direct-chat-name pull-right">Sarah Bullock</span>
-            <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
-          </div>
-          <img class="direct-chat-img" src="https://bootdey.com/img/Content/user_2.jpg" alt="Message User Image">
-          <div class="direct-chat-text">
-            You better believe it!
-          </div>
-        </div> -->
-      </div>
+      <div class="direct-chat-messages" id="direct-chat-messages"></div>
     </div>
     <div class="box-footer">
       <form action="#" method="post">
@@ -63,8 +51,9 @@
 
   chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
-    // document.querySelector("#chat-log").value += `${data.username}:  ${data.message}  \n`;
-    let html = `
+    let html = ``
+    if (!data.own_message) {
+      html = `
         <!-- Message. Default to the left -->
         <div class="direct-chat-msg">
             <div class="direct-chat-info clearfix">
@@ -78,7 +67,24 @@
         </div> 
           `;
 
+    } else {
+      html = `
+        <!-- Message  to the right -->
+        <div class="direct-chat-msg right">
+            <div class="direct-chat-info clearfix">
+              <span class="direct-chat-name pull-right">${data.username}</span>
+            </div>
+            <img class="direct-chat-img" src="${data.thumbnail}" alt="Message User Image">
+            <div class="direct-chat-text">
+              ${data.message}
+              <small class="direct-chat-timestamp pull-right ml-4">${data.message_time_stamp}</small>
+            </div>
+        </div>
+          `;
+    }
+
     document.getElementById("direct-chat-messages").innerHTML += html;
+
   };
 
   chatSocket.onclose = function (e) {
@@ -96,6 +102,9 @@
   document.querySelector("#chat-message-submit").onclick = function (e) {
     const messageInputDom = document.querySelector("#chat-message-input");
     const message = messageInputDom.value;
+    if (message.length <= 0) {
+      return
+    }
     chatSocket.send(
       JSON.stringify({
         message: message,
@@ -106,10 +115,9 @@
 </script>
 
 <style>
-  /* body {
-    margin-top: 20px;
-    background: #eee;
-  } */
+  .max-width-chat {
+    max-width: 900px;
+  }
 
   .box {
     position: relative;
@@ -118,7 +126,7 @@
     border-top: 3px solid #d2d6de;
     margin-bottom: 20px;
     width: 100%;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   }
 
   .box.box-primary {
@@ -160,7 +168,7 @@
   }
 
   .box.height-control .box-body {
-    max-height: 300px;
+    max-height: 900px;
     overflow: auto;
   }
 
@@ -482,7 +490,8 @@
     -o-transform: translate(0, 0);
     transform: translate(0, 0);
     padding: 10px;
-    height: 250px;
+    /* height: 250px; */
+    height: 75vh;
     overflow: auto;
   }
 
@@ -549,7 +558,7 @@
 
   .right .direct-chat-text {
     margin-right: 50px;
-    margin-left: 0;
+    margin-left: auto;
   }
 
   .right .direct-chat-text:after,
@@ -571,6 +580,11 @@
     float: right;
   }
 
+  .right .direct-chat-info {
+    display: block;
+    text-align: right;
+  }
+
   .direct-chat-info {
     display: flex;
     margin-bottom: 2px;
@@ -584,6 +598,7 @@
   .direct-chat-timestamp {
     color: #999;
     margin-left: auto;
+    white-space: nowrap;
   }
 
   .direct-chat-contacts-open .direct-chat-contacts {
