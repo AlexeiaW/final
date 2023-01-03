@@ -25,6 +25,9 @@ SECRET_KEY = 'khh+r=$0jct79ov0&k52z913jd(u*s+)9)&8qnwvxxq%7lr&3v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Login
+LOGIN_URL = '/login/'
+
 ALLOWED_HOSTS = ['localhost',
                  '127.0.0.1',
                  '.coursera-apps.org',

@@ -165,6 +165,7 @@ def indexChat(request):
 # Renders the room index
 
 
+@login_required
 def room(request, room_name):
     chat = Chat.objects.get(room_id=room_name)
     return render(request, 'chat/room.html', {
