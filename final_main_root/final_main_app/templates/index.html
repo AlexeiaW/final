@@ -13,7 +13,17 @@
   <tbody>
     {% for appuserob in users_sorted %}
     <tr>
+      {% if forloop.counter == 1 %}
       <th scope="row">🥇</th>
+      {% elif forloop.counter == 2 %}
+      <th scope="row">🥈</th>
+      {% elif forloop.counter == 3 %}
+      <th scope="row">🥉</th>
+      {% else %}
+      <th scope="row"> </th>
+      {% endif %}
+
+
       <td>{{appuserob}}</td>
       <td>{{appuserob.user.first_name}} {{appuserob.user.last_name}}</td>
       <td># {{appuserob.upvote_sum}} </td>

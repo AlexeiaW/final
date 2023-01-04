@@ -108,8 +108,8 @@ def index(request):
     if not request.user.is_authenticated:
         return render(request, 'index.html')
     else:
-        users_sorted = AppUser.objects.all().order_by(
-            "-answers__upvotes").annotate(upvote_sum=Sum('answers__upvotes'))
+        users_sorted = AppUser.objects.annotate(
+            upvote_sum=Sum('answers__upvotes')).order_by('-upvote_sum')
 
         return render(request, 'index.html', {
             'appuser': request.user.appuser,
