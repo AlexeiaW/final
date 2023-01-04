@@ -135,6 +135,10 @@ def voteApi(request, **kwargs):
         data = request.data
         answer = Answer.objects.get(pk=data['answer_pk'])
 
+        # Users can vote on their own answers
+        if (answer.user.id == request.user.appuser.id):
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         if data['vote_type'] == 'upvote':
             answer.upvotes = answer.upvotes + 1
         elif data['vote_type'] == 'downvote':

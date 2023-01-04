@@ -1,11 +1,11 @@
 {% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
 
-<h1>Knowledge Hub</h1>
+<h1 class="mt-4">Knowledge Hub</h1>
 
-<a class="nav-link" href="/ask-question/">Ask a question</a>
+<a class="btn btn-primary" role="button" href="/ask-question/">Ask a question</a>
 
 
-<h3>Search for questions.</h3>
+<h3 class="mt-4">Search for questions.</h3>
 <form id="search_form" class="form-inline" onsubmit="searchQuestions(event)">
     {% csrf_token %}
     <input class="form-control" type="text" name="search_query" value="" placeholder="Search for questions" size="50" />

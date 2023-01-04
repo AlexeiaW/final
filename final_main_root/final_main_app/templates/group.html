@@ -1,20 +1,43 @@
 {% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
 
-<h1>{{group.name}}</h1>
-<p>{{group.description}}</p>
+<div class="card border-light mb-3">
+    <div class="card-header">{{ group.name }} group page</div>
+    <div class="card-body">
+        <!-- <h5 class="card-title">Here you can find details for {{ group.name }}</h5> -->
+        <p class="card-text">{{group.description }}</p>
+        <p><a class="btn btn-primary" role="button" id="room_url" href="/chat/{{group.chat}}/">Enter</a> the group chat
+            room.</p>
 
-<h2>Chat room</h2>
+        <p>You can also copy the link to the chat room and share it with others to join the chat room for this group.
+        </p>
 
-<p>Click <a id="room_url" href="/chat/{{group.chat}}/">here</a> to enter the group chat room.</p>
+        <div class="row">
+            <div class="col-2">
+                <input class="form-control" type="text" value="{{ request.get_host }}/chat/{{group.chat}}/"
+                    id="myInput">
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-primary" onclick="myFunction()">Copy chat room link</button>
+            </div>
+        </div>
 
-<p>You can also copy the link to the chat room and share it with others to join the chat room for this group.</p>
-
-<div class="row">
-    <div class="col">
-        <input class="form-control" type="text" value="{{ request.get_host }}/chat/{{group.chat}}/" id="myInput">
+        <footer class="mt-4"><small>{{ group.created_on|date}}</small></footer>
     </div>
-    <div class="col">
-        <button type="button" class="btn btn-primary" onclick="myFunction()">Copy chat room link</button>
+</div>
+
+<div class="card border-light mb-3">
+    <div class="card-header">{{ group.name }} group members</div>
+    <div class="card-body results">
+        {% for obj in group.users.all %}
+        <div class="card m-4" style="width:fit-content;">
+            <img class="mx-auto" src="{{obj.images.first.thumbnail.url}}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">{{obj.user.username}}</h5>
+                <p class="item">{{obj.user.first_name}} {{obj.user.last_name}}</p>
+                <a href="/add-friend/{{obj.user.username}}" class="card-link">Add friend</a>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
 
@@ -32,4 +55,11 @@
         });
     }
 </script>
+
+<style>
+    .results {
+        display: flex;
+        flex-wrap: wrap;
+    }
+</style>
 {% endblock %}

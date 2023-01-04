@@ -47,6 +47,8 @@ class Group(models.Model):
     name = models.CharField(max_length=30, unique=False, db_index=True)
     description = models.TextField(null=True, blank=True)
     users = models.ManyToManyField(AppUser, related_name='groups')
+    created_on = models.DateTimeField(
+        auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return self.name
