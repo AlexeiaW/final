@@ -1,8 +1,20 @@
 {% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
 
-<h1>{{story.title}}</h1>
-<h4>Author {{story.author.first_name}} {{story.author.last_name}}</h4>
-<h5>{{story.created_on|date}}</h5>
-<p>{{story.content.html|safe}}</p>
+
+<div class="card border-light mb-3">
+    <div class="card-header">Written by {{story.author.first_name}} {{story.author.last_name}}</div>
+    <div class="card-body">
+        <h5 class="card-title">{{story.title}}</h5>
+        <p class="card-text">{{story.description }}</p>
+        <footer><small>{{story.created_on|date}}</small></footer>
+    </div>
+</div>
+
+<div class="card border-light mb-3">
+    <div class="card-body">
+        <p>{{story.content.html|safe}}</p>
+    </div>
+</div>
+
 
 {% endblock %}

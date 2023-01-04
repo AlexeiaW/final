@@ -1,7 +1,6 @@
 {% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
 
 <h1 class="mt-4">Knowledge Hub</h1>
-
 <a class="btn btn-primary" role="button" href="/ask-question/">Ask a question</a>
 
 
@@ -12,9 +11,10 @@
     <button class="btn btn-primary" type="submit">Search</button>
 </form>
 
-<div id="results" class="list-group">
+<div id="results" class="list-group mt-4">
+    <h3>Top questions</h3>
     {% for question in object_list %}
-    <a href="/question/{{question.id}}" class="list-group-item list-group-item-action ">
+    <a href="/question/{{question.id}}" class="list-group-item list-group-item-action">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{question.title}}</h5>
             <div>

@@ -1,9 +1,9 @@
 {% extends "./base.html" %} {% block content %} {% if user.is_authenticated %}
 
-<h3>Search for users by name to add them.</h3>
-<form id="search_form" class="form-inline" onsubmit="searchUsers(event)">
-  {% csrf_token %} Username:
-  <input class="form-control" type="text" name="username" value="" placeholder="Leave empty to get all users"
+<h3 class="mt-4">Search for friends by username to add them.</h3>
+<form id="search_form" class="form-inline mt-3" onsubmit="searchUsers(event)">
+  {% csrf_token %}
+  <input class="form-control" type="text" name="username" value="" placeholder="Leave empty to get all peers"
     size="50" />
   <button class="btn btn-primary" type="submit">Search</button>
 </form>
@@ -24,16 +24,13 @@
       if (req.readyState === 4) {
         console.log("Got Data");
         html = "";
-        // html = '<div class="image-grid container">';
-        html = "<h3>Your search results</h3>";
-
         data = JSON.parse(req.response);
         if (data.length < 1) {
           html += `<p>There were no users found with user name ${formProps.username}</p>`;
         }
         data.forEach(function (obj) {
           html += `
-          <div class="card" style="width:fit-content;">
+          <div class="card m-4" style="width:fit-content;">
             <img class="mx-auto" src="${obj.image.thumbnail}" alt="Card image cap">
             <div class="card-body">
               <h5 class="card-title">${obj.user.username}</h5>
