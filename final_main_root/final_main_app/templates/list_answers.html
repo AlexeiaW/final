@@ -1,33 +1,40 @@
 {% block content %}
 
-<h5>{{question.answer_set.count}} Answers</h5>
-<!--  -->
-<ul class="list-group list-group-flush">
-  {% for answer in question.answer_set.all %}
-  <li class="list-group-item">
-    <div class="col-sm-9 col-md-10">
-      <div class="body">{{ answer.answer.html|safe }}</div>
-      <div class="meta font-weight-light">
-        Answered by {{ answer.user }} on {{ answer.created|date }}
-      </div>
-      <ul class="list-group list-group-horizontal-xl">
-        <li class="list-group-item">
-          <button id="upvote" type="submit" class="btn" value="{{answer.pk}}" onclick="upVote(this)">
-            👍 <small>{{answer.upvotes}}</small>
-          </button>
-        </li>
-        <li class="list-group-item">
-          <button id="down_vote" type="submit" class="btn" value="{{answer.pk}}" onclick="downVote(this)">
-            👎 <small>{{answer.down_votes}}</small>
-          </button>
-        </li>
-      </ul>
+<div class="card border-light mb-3">
+  <div class="card-header">{{question.answer_set.count}} Answers</div>
+  <div class="card-body">
+    <!-- <h5 class="card-title">{{ question.title }}</h5>
+      <p class="card-text">{{question.question.html|safe }}</p>
+      <footer><small>{{ question.created|date}}</small></footer> -->
+    <ul class="list-group list-group-flush">
+      {% for answer in question.answer_set.all %}
+      <li class="list-group-item p-0">
+        <div class="col-sm-9 col-md-10 pl-0">
+          <div class="body mt-4">{{ answer.answer.html|safe }}</div>
+          <div class="meta font-weight-light">
+            Answered by {{ answer.user }} on {{ answer.created|date }}
+          </div>
+          <ul class="list-group list-group-horizontal-xl mb-4">
+            <li class="list-group-item p-0">
+              <button id="upvote" type="submit" class="btn" value="{{answer.pk}}" onclick="upVote(this)">
+                👍 <small>{{answer.upvotes}}</small>
+              </button>
+            </li>
+            <li class="list-group-item p-0">
+              <button id="down_vote" type="submit" class="btn" value="{{answer.pk}}" onclick="downVote(this)">
+                👎 <small>{{answer.down_votes}}</small>
+              </button>
+            </li>
+          </ul>
 
-  </li>
-  {% empty %}
-  <li class="answer">No answers yet!</li>
-  {% endfor %}
-</ul>
+      </li>
+      {% empty %}
+      <li class="answer">No answers yet!</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
 
 <script>
   const upvote = 'upvote'

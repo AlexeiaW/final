@@ -1,39 +1,57 @@
 {% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
 
-<h1 class="mt-4">Knowledge Hub</h1>
-<a class="btn btn-primary" role="button" href="/ask-question/">Ask a question</a>
 
-
-<h3 class="mt-4">Search for questions.</h3>
-<form id="search_form" class="form-inline" onsubmit="searchQuestions(event)">
-    {% csrf_token %}
-    <input class="form-control" type="text" name="search_query" value="" placeholder="Search for questions" size="50" />
-    <button class="btn btn-primary" type="submit">Search</button>
-</form>
-
-<div id="results" class="list-group mt-4">
-    <h3>Top questions</h3>
-    {% for question in object_list %}
-    <a href="/question/{{question.id}}" class="list-group-item list-group-item-action">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{question.title}}</h5>
-            <div>
-                <div class="row"><small>{{question.created | date}}</small></div>
-                <div class="row"><small>
-                        {% if question.answer_set.count > 0 %}
-                        {{question.answer_set.count}} answers
-                        {% else %}
-                        no answers
-                        {% endif %}
-                    </small></div>
-            </div>
-        </div>
-        <p class="mb-1">{{question.question.text|safe}}</p>
-        <small>{{question.user}}</small>
-    </a> {% empty %}
-    <li>No questions yet.</li>
-    {% endfor %}
+<div class="card border-light mb-3">
+    <div class="card-header">Knowledge Hub</div>
+    <div class="card-body">
+        <p class="card-text"><a class="btn btn-primary" role="button" href="/ask-question/">Ask a question</a></p>
+    </div>
 </div>
+
+<div class="card border-light mb-3">
+    <div class="card-header">Search for questions.</div>
+    <div class="card-body">
+        <form id="search_form" class="form-inline" onsubmit="searchQuestions(event)">
+            {% csrf_token %}
+            <input class="form-control" type="text" name="search_query" value=""
+                placeholder="How to overcome anxiety..." size="50" />
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+
+        <div id="results" class="list-group mt-4"></div>
+    </div>
+</div>
+
+<div class="card border-light mb-3">
+    <div class="card-header">Top questions</div>
+    <div class="card-body">
+        <div class="list-group mt-4">
+            {% for question in object_list %}
+            <a href="/question/{{question.id}}" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1 text-primary">{{question.title}}</h5>
+                    <div>
+                        <div class="row"><small>{{question.created | date}}</small></div>
+                        <div class="row"><small>
+                                {% if question.answer_set.count > 0 %}
+                                {{question.answer_set.count}} answers
+                                {% else %}
+                                no answers
+                                {% endif %}
+                            </small></div>
+                    </div>
+                </div>
+                <p class="mb-1">{{question.question.text|safe}}</p>
+                <small>{{question.user}}</small>
+            </a> {% empty %}
+            <li>No questions yet.</li>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+
 
 <script>
     function searchQuestions(event) {
@@ -46,8 +64,6 @@
             if (req.readyState === 4) {
                 console.log("Got Data");
                 html = "";
-                // html = '<div class="image-grid container">';
-                html = "<h3>Your search results</h3>";
 
                 data = JSON.parse(req.response);
                 if (data.length < 1) {
@@ -57,7 +73,7 @@
                     html += `
                     <a href="/question/${obj.id}" class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">${obj.title}</h5>
+                        <h5 class="mb-1 text-primary">${obj.title}</h5>
                         <small>${obj.created}</small>
                         </div>
                         <p class="mb-1">${obj.question}</p>

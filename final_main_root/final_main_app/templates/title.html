@@ -14,20 +14,43 @@
           Hub <span class="sr-only">(current)</span></a>
       </li>
       {% if user.is_authenticated %}
-      <li class="nav-item">
-        <a class="nav-link" href="/profile/">Profile</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/profile/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Profile
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/reset-password/">Reset password</a>
+          <a class="dropdown-item" href="/media/">Add profile photo</a>
+          <a class="dropdown-item" href="/update/">Update profile details</a>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="/friends/">Friends</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/friends/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Friends
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/my-friends/">My friends</a>
+          <a class="dropdown-item" href="/add-friends/">Add friends</a>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="/groups/">Groups</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/groups/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Groups
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item"  href="/join-group-search/">Join group</a>
+          <a class="dropdown-item"  href="/create-group/">Create group</a>
+          <a class="dropdown-item" href="/my-groups/">My groups</a>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="/stories-index/">Stories</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/stories-index/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Stories
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item"  href="/create-story/">Create story</a>
+          <a class="dropdown-item"  href="/my-stories/">My stories</a>
+          <a class="dropdown-item" href="/explore-stories/">Explore stories</a>
       </li>
 
       <li class="nav-item">
@@ -50,3 +73,10 @@
     </ul>
   </div>
 </nav>
+
+<style>
+  .dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0; /* remove the gap so it doesn't close */
+}
+</style>
