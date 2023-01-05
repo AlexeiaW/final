@@ -1,22 +1,27 @@
 {% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
 
-<h1>Your friends</h1>
-<table>
-  <tr>
-    <th>Friend username</th>
-  </tr>
-  {% for friend in appuser.friends.all %}
-  <tr>
-    <td>
-      <div class="card" style="width: 18rem;">
+<div class="card border-light mb-3">
+  <div class="card-header">Your friends</div>
+  <div class="card-body">
+    <div id="results">
+      {% for friend in appuser.friends.all %}
+      <div class="card m-4" style="width: 18rem;">
+        <img class="mx-auto" src="{{friend.images.first.thumbnail.url}}" alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title">{{friend}}</h5>
           <p class="card-title">{{friend.user.first_name}} {{friend.user.last_name}}</p>
           <a href="/new-chat/" class="card-link">Chat</a>
         </div>
       </div>
-    </td>
-  </tr>
-  {% endfor %}
-</table>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  #results {
+    display: flex;
+    flex-wrap: wrap;
+  }
+</style>
 {% endblock %}

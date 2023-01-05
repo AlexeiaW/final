@@ -1,17 +1,25 @@
 {% extends "./base.html" %} {% block content %} {% if user.is_authenticated %}
 
-<h3 class="mt-4">Search for friends by username to add them.</h3>
-<form id="search_form" class="form-inline mt-3" onsubmit="searchUsers(event)">
-  {% csrf_token %}
-  <input class="form-control" type="text" name="username" value="" placeholder="Leave empty to get all peers"
-    size="50" />
-  <button class="btn btn-primary" type="submit">Search</button>
-</form>
+<div class="card border-light mb-3">
+  <div class="card-header">Search for friends by username to add them</div>
+  <div class="card-body">
+    <form id="search_form" class="form-inline mt-3" onsubmit="searchUsers(event)">
+      {% csrf_token %}
+      <input class="form-control" type="text" name="username" value="" placeholder="Leave empty to get all peers"
+        size="50" />
+      <button class="btn btn-primary" type="submit">Search</button>
+    </form>
 
-<div id="results"></div>
-{% else %}
-<p>You are not logged in, please register or log in.</p>
-{% endif %}
+    <div id="results"></div>
+    {% else %}
+    <p>You are not logged in, please register or log in.</p>
+    {% endif %}
+  </div>
+</div>
+
+
+
+
 
 <script>
   function searchUsers(event) {
@@ -30,7 +38,7 @@
         }
         data.forEach(function (obj) {
           html += `
-          <div class="card m-4" style="width:fit-content;">
+          <div class="card mr-4 mt-4" style="width:fit-content;">
             <img class="mx-auto" src="${obj.image.thumbnail}" alt="Card image cap">
             <div class="card-body">
               <h5 class="card-title">${obj.user.username}</h5>
