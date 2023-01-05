@@ -122,10 +122,6 @@ def addFriends(request):
     return render(request, 'add_friends.html')
 
 
-def storiesIndex(request):
-    return render(request, 'stories_index.html')
-
-
 def joinGroupSearch(request):
     return render(request, 'join_group.html')
 
@@ -135,19 +131,6 @@ def joinGroupSearch(request):
 
 def discover(request):
     return render(request, 'discover.html')
-
-
-def profile(request):
-    return render(request, 'profile.html')
-
-
-def friends(request):
-    return render(request, 'friends.html')
-
-
-def groups(request):
-    return render(request, 'groups.html')
-
 
 # Media view, only if login true
 
