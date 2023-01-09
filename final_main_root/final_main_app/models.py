@@ -11,6 +11,14 @@ from django.urls.base import reverse
 # The Model that is used to add data to the auth user model. AppUser is mainly used as the "user" and will create relationships between friends
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=200, unique=True, db_index=True)
+    slug = models.SlugField(null=True, blank=True, default=None, db_index=True)
+
+    def __str__(self):
+        return self.name
+
+
 class AppUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -23,6 +31,9 @@ class AppUser(models.Model):
         symmetrical=False,
         blank=True
     )
+
+    interests = models.ManyToManyField(
+        Category, related_name='categories_appusers')
 
     def __str__(self):
         return self.user.username
@@ -67,14 +78,6 @@ class Chat(models.Model):
         return self.room_id.hex
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=200, unique=True, db_index=True)
-    slug = models.SlugField(null=True, blank=True, default=None, db_index=True)
-
-    def __str__(self):
-        return self.name
-
-
 class Author(models.Model):
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
@@ -94,7 +97,7 @@ class Story(models.Model):
     content = QuillField()
     created_on = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, related_name='category_stories')
+        Category, on_delete=models.SET_NULL, related_name='category_stories', null=True)
 
     class Meta:
         ordering = ['-created_on']

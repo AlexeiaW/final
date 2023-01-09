@@ -30,10 +30,13 @@ def appuserUpdate(request):
             profile.user = user
 
             if 'organisation' in user_form.cleaned_data:
-                profile.organisation = request.DATA['organisation']
+                profile.organisation = profile_form.cleaned_data['organisation']
 
             if 'status' in user_form.cleaned_data:
-                profile.staus = request.DATA['status']
+                profile.status = profile_form.cleaned_data['status']
+
+            if 'interests' in profile_form.cleaned_data:
+                profile.interests.add(*profile_form.cleaned_data['interests'])
 
             profile.save()
             return HttpResponseRedirect('../')

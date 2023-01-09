@@ -29,9 +29,17 @@ class UserUpdateForm(forms.ModelForm):
 
 
 class UserProfileForm(forms.ModelForm):
+    # interest = forms.ModelChoiceField(queryset=Category.objects.all(
+    # ), empty_label="Choose what interests you", label='Interests')
+    # categories = Category.objects.all()
+    # interest = forms.ModelMultipleChoiceField(
+    #     widget=forms.CheckboxSelectMultiple, required=True, queryset=categories, label='Interests')
+    interests = forms.ModelMultipleChoiceField(
+        Category.objects.all(), widget=forms.SelectMultiple)
+
     class Meta:
         model = AppUser
-        fields = ('organisation', 'status', 'description')
+        fields = ('organisation', 'status', 'description', 'interests')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -101,4 +109,3 @@ class AnswerForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for myField in self.fields:
             self.fields[myField].widget.attrs['class'] = 'form-control'
-
