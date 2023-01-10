@@ -114,9 +114,21 @@ def index(request):
         users_sorted = AppUser.objects.annotate(
             upvote_sum=Sum('answers__upvotes')).order_by('-upvote_sum')
 
+        appuser_id = request.user.appuser.id
+        rank = None
+
+        for index, item in enumerate(users_sorted):
+            if (item.id == appuser_id):
+                rank = index + 1
+
+        similar_users = AppUser.objects.filter(
+            interests=request.user.appuser.interests.first().id)
+
         return render(request, 'index.html', {
             'appuser': request.user.appuser,
-            'users_sorted':  users_sorted
+            'users_sorted':  users_sorted,
+            'rank': rank,
+            'similar_users': similar_users
         })
 
 

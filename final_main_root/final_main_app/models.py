@@ -60,6 +60,8 @@ class Group(models.Model):
     users = models.ManyToManyField(AppUser, related_name='groups')
     created_on = models.DateTimeField(
         auto_now_add=True, null=True, blank=True)
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, related_name='category_groups', null=True)
 
     def __str__(self):
         return self.name
@@ -110,8 +112,10 @@ class Question(models.Model):
     title = models.CharField(max_length=140)
     question = QuillField()
     user = models.ForeignKey(AppUser,
-                             on_delete=models.CASCADE)
+                             on_delete=models.CASCADE, related_name='appuser_questions')
     created = models.DateTimeField(auto_now_add=True)
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, related_name='category_questions', null=True)
 
     def __str__(self):
         return self.title

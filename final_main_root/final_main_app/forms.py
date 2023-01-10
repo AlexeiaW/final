@@ -48,9 +48,12 @@ class UserProfileForm(forms.ModelForm):
 
 
 class GroupForm(forms.ModelForm):
+    category = forms.ModelChoiceField(queryset=Category.objects.all(
+    ), empty_label="Choose a category", label='Category')
+
     class Meta:
         model = Group
-        fields = ('name', 'description')
+        fields = ('name', 'description', 'category')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -73,6 +76,8 @@ class StoryForm(forms.ModelForm):
 
 
 class QuestionForm(forms.ModelForm):
+    category = forms.ModelChoiceField(queryset=Category.objects.all(
+    ), empty_label="Choose a category", label='Category')
     user = forms.ModelChoiceField(
         widget=forms.HiddenInput,
         queryset=AppUser.objects.all(),
@@ -81,7 +86,7 @@ class QuestionForm(forms.ModelForm):
 
     class Meta:
         model = Question
-        fields = ['title', 'question', 'user', ]
+        fields = ['title', 'question', 'user', 'category']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
