@@ -175,9 +175,9 @@ def room(request, room_name):
 def categoryStories(request, category_slug):
     category = Category.objects.get(slug=category_slug)
     stories = category.category_stories.all()
-    return render(request, 'explore-stories.html', {
+    return render(request, 'category-stories.html', {
         'appuser': request.user.appuser,
-        'categories': [category],
+        'category': category,
         'stories':  stories,
     })
     # Add friend endpoint to associate friends with each other

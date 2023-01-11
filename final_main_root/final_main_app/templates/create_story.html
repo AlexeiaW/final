@@ -1,10 +1,12 @@
 {% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
+<div class="card border-light mb-3">
+  <div class="card-header">Create a story</div>
+  <div class="card-body">
+    <form id="form" method="post" action="/create-story/" enctype="multipart/form-data">
+      {% csrf_token %} {{ form.as_p }}
+      <input type="submit" name="submit" value="Create" class="btn btn-primary" />
+    </form>
 
-<h1>Hello {{ user.username }} <span class="sr-only">(current)</span></h1>
-<h3>Create a story</h3>
-
-<form id="form" method="post" action="/create-story/" enctype="multipart/form-data">
-  {% csrf_token %} {{ form.as_p }}
-  <input type="submit" name="submit" value="Create" class="btn btn-primary" />
-</form>
+  </div>
+</div>
 {% endblock %}

@@ -1,14 +1,30 @@
 {% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
+<div class="card border-light mb-3">
+  <div class="card-header">{{ appuser.user }} here are stories created by you</div>
+  <div class="card-body">
+    <div id="results" style="display: flex;flex-wrap: wrap; align-items: flex-start;">
 
-<h1>Your stories</h1>
-<table>
-  <tr>
-    <th>Story name</th>
-  </tr>
-  {% for story in appuser.author.author_stories.all %}
-  <tr>
-    <td><a href="/story/{{story.pk}}">{{story}}</a></td>
-  </tr>
-  {% endfor %}
-</table>
+      {% for story in appuser.author.author_stories.all %}
+      <div class="card mr-4" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">{{story}}</h5>
+          <p class="card-text">
+          <p>{{story.description}}</p>
+          </p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">{{story.author.first_name}} {{story.author.last_name}}</li>
+          <li class="list-group-item">{{story.created_on|date}}</li>
+        </ul>
+        <div class="card-body">
+          <div class="alert alert-primary" role="alert">
+            <p class="mb-0">{{story.category}}</p>
+          </div>
+          <a href="/story/{{story.pk}}">Read more</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
 {% endblock %}
