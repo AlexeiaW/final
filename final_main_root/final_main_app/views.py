@@ -363,9 +363,13 @@ def register(request):
             user.save()
             profile = profile_form.save(commit=False)
             profile.user = user
+            profile.save()
 
             if 'organisation' in user_form.cleaned_data:
                 profile.organisation = request.DATA['organisation']
+
+            if 'interests' in profile_form.cleaned_data:
+                profile.interests.add(*profile_form.cleaned_data['interests'])
 
             profile.save()
 
