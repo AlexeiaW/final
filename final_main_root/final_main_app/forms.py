@@ -62,7 +62,7 @@ class StoryForm(forms.ModelForm):
 
     class Meta:
         model = Story
-        fields = ('title', 'description', 'content', 'category')
+        fields = ('title', 'description', 'category')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -104,7 +104,7 @@ class AnswerForm(forms.ModelForm):
 
     class Meta:
         model = Answer
-        fields = ['content', 'user', 'question', ]
+        # fields = ['content', 'user', 'question', ]
         fields = []
 
     # def __init__(self, *args, **kwargs):

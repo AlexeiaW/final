@@ -114,6 +114,9 @@ class Story(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('final_main_app:story_detail', kwargs={'pk': self.id})
+
 
 class Question(models.Model):
     title = models.CharField(max_length=140)

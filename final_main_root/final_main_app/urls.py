@@ -38,10 +38,10 @@ urlpatterns = [
          (views.myGroups), name='my_groups'),
     path('group/<int:pk>', views.GroupDetail.as_view(), name='group'),
     path('create-group/', views.createGroup, name='create_group'),
-    path('create-story/', views.createStory, name='create_story'),
+    path('create-story/', views.CreateStoryView.as_view(), name='create_story'),
     path('my-stories/', login_required(login_url='../login/')
          (views.myStories), name='my_stories'),
-    path('story/<int:pk>', views.StoryDetail.as_view(), name='group'),
+    path('story/<int:pk>', views.StoryDetail.as_view(), name='story_detail'),
     path('explore-stories/', login_required(login_url='../login/')
          (views.exploreStories), name='explore_stories'),
     path('api/search-stories/', api.StoriesAPIView.as_view(),

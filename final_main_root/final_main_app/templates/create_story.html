@@ -2,9 +2,16 @@
 <div class="card border-light mb-3">
   <div class="card-header">Create a story</div>
   <div class="card-body">
-    <form id="form" method="post" action="/create-story/" enctype="multipart/form-data">
-      {% csrf_token %} {{ form.as_p }}
-      <input type="submit" name="submit" value="Create" class="btn btn-primary" />
+    <!-- <form id="form" method="post" action="/create-story/" enctype="multipart/form-data"> -->
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }} {{content.as_p}}
+      <div class="mt-4">
+        <button class="btn btn-primary" type="submit" name="action" value="PREVIEW">
+          Preview
+        </button>
+        <button class="btn btn-primary" type="submit" name="action" value="SAVE">
+          Ask!
+        </button>
     </form>
 
   </div>

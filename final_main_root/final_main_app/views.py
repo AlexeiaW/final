@@ -81,30 +81,83 @@ def createGroup(request):
         })
 
 
-def createStory(request):
-    if request.method == 'POST':
-        if not request.user.is_authenticated:
-            return render(request, 'index.html')
+# def createStory(request):
+#     if request.method == 'POST':
+#         if not request.user.is_authenticated:
+#             return render(request, 'index.html')
 
-        storyForm = StoryForm(data=request.POST)
-        if storyForm.is_valid():
-            appuser = AppUser.objects.get(id=request.user.appuser.id)
-            storyForm.instance.author = appuser.author
-            storyForm.cleaned_data['slug'] = storyForm.cleaned_data['title'].lower(
-            )
-            story = storyForm.save(commit=False)
-            story.slug = storyForm.cleaned_data['title'].lower(
-            )
-            story.save()
+#         storyForm = StoryForm(data=request.POST)
+#         contentForm = ContentForm(data=request.POST)
+#         if storyForm.is_valid():
+#             appuser = AppUser.objects.get(id=request.user.appuser.id)
+#             storyForm.instance.author = appuser.author
+#             storyForm.cleaned_data['slug'] = storyForm.cleaned_data['title'].lower(
+#             )
+#             storyForm.content = contentForm
+#             story = storyForm.save(commit=False)
+#             story.slug = storyForm.cleaned_data['title'].lower(
+#             )
+#             story.save()
 
-            messages.success(request,
-                             'Your story was successfully created!',
+#             messages.success(request,
+#                              'Your story was successfully created!',
+#                              extra_tags='alert-success')
+#             return HttpResponseRedirect('/my-stories/')
+#     else:
+#         return render(request, 'create_story.html', {
+#             'form': StoryForm(),
+#             'content': ContentForm()
+#         })
+
+class CreateStoryView(LoginRequiredMixin, CreateView):
+    model = Story()
+    form_class = StoryForm
+    template_name = 'create_story.html'
+
+    def get_initial(self):
+        return {
+            'user': self.request.user.appuser.id
+        }
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateStoryView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['story'] = StoryForm(self.request.POST)
+            context['content'] = ContentForm(self.request.POST)
+        else:
+            context['story'] = StoryForm()
+            context['content'] = ContentForm()
+        return context
+
+    def form_valid(self, form):
+        action = self.request.POST.get('action')
+        if action == 'SAVE':
+            context = self.get_context_data()
+            content = context['content']
+
+            if content.is_valid() and form.is_valid():
+                story = form.save(commit=False)
+
+                story.user = self.request.user.appuser
+                story.content = content.save()
+                story.author = self.request.user.appuser.author
+                story.slug = story.title.lower(
+                )
+
+                story.save()
+
+            # save and redirect as usual.
+            messages.success(self.request,
+                             'Success!',
                              extra_tags='alert-success')
-            return HttpResponseRedirect('/my-stories/')
-    else:
-        return render(request, 'create_story.html', {
-            'form': StoryForm()
-        })
+            return super().form_valid(form)
+        elif action == 'PREVIEW':
+            preview = Question(
+                question=form.cleaned_data['question'],
+                title=form.cleaned_data['title'])
+            ctx = self.get_context_data(preview=preview)
+            return self.render_to_response(context=ctx)
+        return HttpResponseBadRequest()
 
 
 def index(request):
