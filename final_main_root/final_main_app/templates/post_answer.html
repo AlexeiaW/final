@@ -4,7 +4,7 @@
     <div class="card-body">
         <div class="col-sm-12 pl-0">
             <form method="post" action="{% url "final_main_app:answer_question" pk=question.id %}">
-                {{ answer_form }}
+                {{ answer.as_p}} {{ content.as_p }}
                 {% csrf_token %}
                 <button class="btn btn-primary" type="submit" name="action" value="PREVIEW">Preview
                 </button>

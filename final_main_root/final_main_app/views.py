@@ -367,6 +367,7 @@ def user_logout(request):
 
 
 class AskQuestionView(LoginRequiredMixin, CreateView):
+    model=Question()
     form_class = QuestionForm
     template_name = 'ask_question.html'
 
@@ -375,9 +376,26 @@ class AskQuestionView(LoginRequiredMixin, CreateView):
             'user': self.request.user.appuser.id
         }
 
+    def get_context_data(self, **kwargs):
+        context = super(AskQuestionView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['question'] = QuestionForm(self.request.POST)
+            context['content'] = ContentForm(self.request.POST)
+        else:
+            context['question'] = QuestionForm()
+            context['content'] = ContentForm()
+        return context 
+
     def form_valid(self, form):
         action = self.request.POST.get('action')
         if action == 'SAVE':
+            context = self.get_context_data()
+            content = context['content']
+            if content.is_valid() and form.is_valid():
+                question = form.save(commit=False)
+                question.user = self.request.user.appuser
+                question.content = content.save()
+                question.save()
             # save and redirect as usual.
             messages.success(self.request,
                              'Success!',
@@ -396,19 +414,24 @@ class QuestionDetailView(DetailView):
     model = Question
     template_name = 'question_detail.html'
 
+    def get_initial(self):
+        return {
+            'question': Question.objects.get(pk=self.kwargs['pk']),
+            'user': self.request.user.id,
+        }
+
+    def get_question(self):
+        return Question.objects.get(pk=self.kwargs['pk'])
+        
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx.update({
-            'answer_form': AnswerForm(initial={
-                'user': self.request.user.appuser.id,
-                'question': self.object.id,
-            })
-        })
-        return ctx
+            context = super(QuestionDetailView, self).get_context_data(**kwargs)
+            context['answer'] = AnswerForm()
+            context['content'] = ContentForm()
+            return context
+
 
 
 class QuestionListView(ListView):
-
     model = Question
     paginate_by = 100  # if pagination is desired
     template_name = 'question_list.html'
@@ -426,18 +449,16 @@ class QuestionListView(ListView):
 
 
 class CreateAnswerView(LoginRequiredMixin, CreateView):
+    model=Answer
     form_class = AnswerForm
     template_name = 'create_answer.html'
 
-    def get_initial(self):
-        return {
-            'question': self.get_question().id,
-            'user': self.request.user.id,
-        }
-
     def get_context_data(self, **kwargs):
-        return super().get_context_data(question=self.get_question(),
-                                        **kwargs)
+        context = super(CreateAnswerView, self).get_context_data(question=self.get_question(), **kwargs)
+        if self.request.POST:
+            context['content'] = ContentForm(self.request.POST)
+            context['answer'] = AnswerForm(self.request.POST)
+        return context
 
     def get_success_url(self):
         return self.object.question.get_absolute_url()
@@ -445,6 +466,21 @@ class CreateAnswerView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         action = self.request.POST.get('action')
         if action == 'SAVE':
+            context = self.get_context_data()
+            content = context['content']
+            if content.is_valid():
+                content = content.save()
+            answer_form = context['answer']
+            if answer_form.is_valid():
+                answer = answer_form.save(commit=False)
+                answer.user = self.request.user.appuser
+                answer.question = self.get_question()
+                answer.save()
+
+            # save and redirect as usual.
+            messages.success(self.request,
+                             'Success!',
+                             extra_tags='alert-success')
             # save and redirect as usual.
             return super().form_valid(form)
         elif action == 'PREVIEW':

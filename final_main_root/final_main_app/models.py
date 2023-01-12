@@ -19,6 +19,12 @@ class Category(models.Model):
         return self.name
 
 
+class Content(models.Model):
+    content = QuillField()
+    created_on = models.DateTimeField(
+        auto_now_add=True, null=True, blank=True)
+
+
 class AppUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -96,7 +102,8 @@ class Story(models.Model):
     author = models.ForeignKey(
         Author, on_delete=models.CASCADE, related_name='author_stories')
     updated_on = models.DateTimeField(auto_now=True)
-    content = QuillField()
+    # content = QuillField()
+    content = models.OneToOneField(Content, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, related_name='category_stories', null=True)
@@ -110,7 +117,9 @@ class Story(models.Model):
 
 class Question(models.Model):
     title = models.CharField(max_length=140)
-    question = QuillField()
+    # question = QuillField()
+    content = models.OneToOneField(Content, on_delete=models.CASCADE)
+
     user = models.ForeignKey(AppUser,
                              on_delete=models.CASCADE, related_name='appuser_questions')
     created = models.DateTimeField(auto_now_add=True)
@@ -125,7 +134,9 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    answer = QuillField()
+    # answer = QuillField()
+    content = models.OneToOneField(Content, on_delete=models.CASCADE)
+
     user = models.ForeignKey(AppUser, related_name='answers',
                              on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
