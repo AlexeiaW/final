@@ -10,7 +10,7 @@
       {% for answer in question.answer_set.all %}
       <li class="list-group-item p-0">
         <div class="col-sm-9 col-md-10 pl-0">
-          <div class="body mt-4">{{ answer.answer.html|safe }}</div>
+          <div class="body mt-4">{{ answer.content.content.html|safe }}</div>
           <div class="meta font-weight-light">
             Answered by {{ answer.user }} on {{ answer.created|date }}
           </div>

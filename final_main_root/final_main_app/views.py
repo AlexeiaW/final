@@ -121,8 +121,12 @@ def index(request):
             if (item.id == appuser_id):
                 rank = index + 1
 
-        similar_users = AppUser.objects.filter(
-            interests=request.user.appuser.interests.first().id)
+        similar_users = []
+        try:
+            similar_users = AppUser.objects.filter(
+                interests=request.user.appuser.interests.first().id)
+        except:
+            print("An exception occurred")
 
         return render(request, 'index.html', {
             'appuser': request.user.appuser,
@@ -367,7 +371,7 @@ def user_logout(request):
 
 
 class AskQuestionView(LoginRequiredMixin, CreateView):
-    model=Question()
+    model = Question()
     form_class = QuestionForm
     template_name = 'ask_question.html'
 
@@ -384,7 +388,7 @@ class AskQuestionView(LoginRequiredMixin, CreateView):
         else:
             context['question'] = QuestionForm()
             context['content'] = ContentForm()
-        return context 
+        return context
 
     def form_valid(self, form):
         action = self.request.POST.get('action')
@@ -422,13 +426,12 @@ class QuestionDetailView(DetailView):
 
     def get_question(self):
         return Question.objects.get(pk=self.kwargs['pk'])
-        
-    def get_context_data(self, **kwargs):
-            context = super(QuestionDetailView, self).get_context_data(**kwargs)
-            context['answer'] = AnswerForm()
-            context['content'] = ContentForm()
-            return context
 
+    def get_context_data(self, **kwargs):
+        context = super(QuestionDetailView, self).get_context_data(**kwargs)
+        context['answer'] = AnswerForm()
+        context['content'] = ContentForm()
+        return context
 
 
 class QuestionListView(ListView):
@@ -449,12 +452,13 @@ class QuestionListView(ListView):
 
 
 class CreateAnswerView(LoginRequiredMixin, CreateView):
-    model=Answer
+    model = Answer
     form_class = AnswerForm
     template_name = 'create_answer.html'
 
     def get_context_data(self, **kwargs):
-        context = super(CreateAnswerView, self).get_context_data(question=self.get_question(), **kwargs)
+        context = super(CreateAnswerView, self).get_context_data(
+            question=self.get_question(), **kwargs)
         if self.request.POST:
             context['content'] = ContentForm(self.request.POST)
             context['answer'] = AnswerForm(self.request.POST)
@@ -470,9 +474,13 @@ class CreateAnswerView(LoginRequiredMixin, CreateView):
             content = context['content']
             if content.is_valid():
                 content = content.save()
+
             answer_form = context['answer']
+
             if answer_form.is_valid():
-                answer = answer_form.save(commit=False)
+                # answer = answer_form.save(commit=False)
+                answer = form.save(commit=False)
+                answer.content = content
                 answer.user = self.request.user.appuser
                 answer.question = self.get_question()
                 answer.save()
