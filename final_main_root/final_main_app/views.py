@@ -504,7 +504,7 @@ class QuestionListView(ListView):
     def get_queryset(self):
         # order questions by the amount of answers
         questions_sorted = Question.objects.annotate(
-            count=Count('answer__id')).order_by('-count')
+            count=Count('answers__id')).order_by('-count')
         return questions_sorted
 
 

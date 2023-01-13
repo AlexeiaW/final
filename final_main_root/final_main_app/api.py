@@ -83,7 +83,7 @@ class StoriesAPIView(generics.ListCreateAPIView):
         search_query = self.request.query_params.get('search_query')
         if search_query is not None:
             queryset = queryset.filter(
-                Q(title__icontains=search_query) | Q(description__icontains=search_query) | Q(content__icontains=search_query))
+                Q(title__icontains=search_query) | Q(description__icontains=search_query) | Q(content__content__icontains=search_query))
         return queryset
 # Get a list of groups through api, based on search criteria from the client. The search will be based on the group name
 
@@ -115,7 +115,7 @@ class QuestionsAPIView(generics.ListCreateAPIView):
         search_query = self.request.query_params.get('search_query')
         if search_query is not None:
             queryset = queryset.filter(
-                Q(title__icontains=search_query) | Q(question__icontains=search_query))
+                Q(title__icontains=search_query) | Q(content__content__icontains=search_query))
         return queryset
 
 # Get a list of all the users in the system as an array of json objects

@@ -140,10 +140,10 @@ class Answer(models.Model):
     # answer = QuillField()
     content = models.OneToOneField(Content, on_delete=models.CASCADE)
 
-    user = models.ForeignKey(AppUser, related_name='answers',
+    user = models.ForeignKey(AppUser, related_name='users',
                              on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
-    question = models.ForeignKey(to=Question,
+    question = models.ForeignKey(to=Question, related_name='answers',
                                  on_delete=models.CASCADE)
     upvotes = models.IntegerField(default=0)
     down_votes = models.IntegerField(default=0)

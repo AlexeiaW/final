@@ -65,8 +65,15 @@ class QuestionListSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data["user"] = AppUserSerializer(instance.user).data
+        data["content"] = ContentSerializer(instance.content).data
         # data["answers"] = AnswerSerializer(instance.answers).data
         return data
+
+
+class ContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Content
+        fields = '__all__'
 
 
 class AppUserSerializer(serializers.ModelSerializer):
@@ -101,6 +108,7 @@ class HomePagesAppUserSerializer(serializers.ModelSerializer):
 class AnswerSerializer(serializers.ModelSerializer):
     user = AppUser()
     question = Question()
+    content = Content()
 
     class Meta:
         model = Answer
