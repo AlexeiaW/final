@@ -184,6 +184,10 @@
 </div>
 
 {% else %}
-<p>
-  You are not logged in, please register or log in. {% endif %} {% endblock %}
-</p>
+{% block body %}
+
+{% include "./logged_out_message.html" %}
+
+{% endblock %}
+
+{% endif %} {% endblock %}
