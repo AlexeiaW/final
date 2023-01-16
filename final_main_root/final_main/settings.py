@@ -147,3 +147,39 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+BOOTSTRAP4 = {
+
+    # The complete URL to the Bootstrap CSS file
+    # Note that a URL can be either a string,
+    # e.g. "https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css",
+    # or a dict like the default value below.
+    "css_url": {
+        "href": "/static/final_main_app/css/bootstrap.min.css"
+    },
+
+    # The complete URL to the Bootstrap bundle JavaScript file
+    "javascript_url": {
+        "url": "/static/final_main_app/js/bootstrap.bundle.min.js"
+    },
+
+    # The complete URL to the Bootstrap CSS theme file (None means no theme)
+    "theme_url": None,
+
+    # The URL to the jQuery JavaScript file (full)
+    "jquery_url": {
+        "url": "/static/final_main_app/js/jquery-3.5.1.min.js"
+    },
+
+    # The URL to the jQuery JavaScript file (slim)
+    "jquery_slim_url": {
+        "url": "/static/final_main_app/js/jquery-3.5.1.slim.min.js"
+    },
+
+    # Put JavaScript in the HEAD section of the HTML document (only relevant if you use bootstrap4.html)
+    'javascript_in_head': True,
+
+    # Include jQuery with Bootstrap JavaScript False|falsy|slim|full (default=False)
+    # False - means tag bootstrap_javascript use default value - `falsy` and does not include jQuery)
+    'include_jquery': True,
+}
