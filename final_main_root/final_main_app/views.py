@@ -165,7 +165,7 @@ def index(request):
         return render(request, 'index.html')
     else:
         users_sorted = AppUser.objects.annotate(
-            upvote_sum=Sum('answers__upvotes')).order_by('-upvote_sum')
+            upvote_sum=Sum('user_answers__upvotes')).order_by('-upvote_sum')
 
         appuser_id = request.user.appuser.id
         rank = None

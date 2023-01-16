@@ -140,7 +140,7 @@ class Answer(models.Model):
     # answer = QuillField()
     content = models.OneToOneField(Content, on_delete=models.CASCADE)
 
-    user = models.ForeignKey(AppUser, related_name='users',
+    user = models.ForeignKey(AppUser, related_name='user_answers',
                              on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     question = models.ForeignKey(to=Question, related_name='answers',
