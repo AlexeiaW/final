@@ -10,7 +10,6 @@
   const req = new XMLHttpRequest();
   req.onreadystatechange = function () {
     if (req.readyState === 4) {
-      console.log("Got Data");
       html = "";
       data = JSON.parse(req.response);
       if (data.length < 1) {
