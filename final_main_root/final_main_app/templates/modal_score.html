@@ -1,0 +1,46 @@
+{% block content %}
+
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Congrats {{ appuser.user.username }} 🥳!</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Your contributions to the community have been gaining attention! Your overall score and ranking has
+                improved to <span class="badge badge-light"
+                    id="appuser_score">{{appuser_score.first.upvote_sum}}</span>. Keep
+                going 🎉!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mx-auto" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Show the user the progess of his contributions to the community
+    $(window).on('load', function () {
+        var delayMs = 1500; // delay in milliseconds
+
+        setTimeout(function () {
+            var appuser_score = $('#appuser_score').text();
+            let appuser_score_local_storage = localStorage.getItem('appuser_score')
+
+            if (appuser_score !== appuser_score_local_storage) {
+                localStorage.setItem('appuser_score', appuser_score);
+                $('#myModal').modal('show');
+            } else {
+                localStorage.setItem('appuser_score', appuser_score);
+            }
+
+        }, delayMs);
+    });
+
+</script>
+{% endblock %}

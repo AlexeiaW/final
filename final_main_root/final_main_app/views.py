@@ -167,6 +167,11 @@ def index(request):
         users_sorted = AppUser.objects.annotate(
             upvote_sum=Sum('user_answers__upvotes')).order_by('-upvote_sum')
 
+        appuser_object = AppUser.objects.filter(pk=request.user.appuser.id)
+
+        appuser_score = appuser_object.annotate(
+            upvote_sum=Sum('user_answers__upvotes'))
+
         appuser_id = request.user.appuser.id
         rank = None
 
@@ -185,7 +190,8 @@ def index(request):
             'appuser': request.user.appuser,
             'users_sorted':  users_sorted,
             'rank': rank,
-            'similar_users': similar_users
+            'similar_users': similar_users,
+            'appuser_score': appuser_score
         })
 
 
