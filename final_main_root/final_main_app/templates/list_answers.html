@@ -1,13 +1,13 @@
 {% block content %}
 
 <div class="card border-light mb-3">
-  <div class="card-header">{{question.answer_set.count}} Answers</div>
+  <div class="card-header">{{question.answers.count}} Answers</div>
   <div class="card-body">
     <!-- <h5 class="card-title">{{ question.title }}</h5>
       <p class="card-text">{{question.question.html|safe }}</p>
       <footer><small>{{ question.created|date}}</small></footer> -->
     <ul class="list-group list-group-flush">
-      {% for answer in question.answer_set.all %}
+      {% for answer in question.answers.all %}
       <li class="list-group-item p-0">
         <div class="col-sm-9 col-md-10 pl-0">
           <div class="body mt-4">{{ answer.content.content.html|safe }}</div>

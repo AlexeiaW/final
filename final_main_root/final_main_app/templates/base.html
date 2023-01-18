@@ -1,9 +1,11 @@
-{% include "./header.html" %} {% include "./title.html" %}
+{% include "./header.html" %}
+
+{% include "./title.html" %}
 
 {% if messages %}
 <ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+  {% for message in messages %}
+  <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
     {% endfor %}
 </ul>
 {% endif %}

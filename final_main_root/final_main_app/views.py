@@ -81,34 +81,6 @@ def createGroup(request):
         })
 
 
-# def createStory(request):
-#     if request.method == 'POST':
-#         if not request.user.is_authenticated:
-#             return render(request, 'index.html')
-
-#         storyForm = StoryForm(data=request.POST)
-#         contentForm = ContentForm(data=request.POST)
-#         if storyForm.is_valid():
-#             appuser = AppUser.objects.get(id=request.user.appuser.id)
-#             storyForm.instance.author = appuser.author
-#             storyForm.cleaned_data['slug'] = storyForm.cleaned_data['title'].lower(
-#             )
-#             storyForm.content = contentForm
-#             story = storyForm.save(commit=False)
-#             story.slug = storyForm.cleaned_data['title'].lower(
-#             )
-#             story.save()
-
-#             messages.success(request,
-#                              'Your story was successfully created!',
-#                              extra_tags='alert-success')
-#             return HttpResponseRedirect('/my-stories/')
-#     else:
-#         return render(request, 'create_story.html', {
-#             'form': StoryForm(),
-#             'content': ContentForm()
-#         })
-
 class CreateStoryView(LoginRequiredMixin, CreateView):
     model = Story()
     form_class = StoryForm
@@ -532,6 +504,11 @@ class CreateAnswerView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         action = self.request.POST.get('action')
+
+        # # User should not answer own question
+        # if (self.get_question().user.id == self.request.user.appuser.id):
+        #     return HttpResponseBadRequest()
+
         if action == 'SAVE':
             context = self.get_context_data()
             content = context['content']
