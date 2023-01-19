@@ -29,7 +29,7 @@ class AppUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
     organisation = models.CharField(max_length=256, null=True, blank=True)
-    status = models.TextField(null=True, blank=True)
+    status = models.TextField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     friends = models.ManyToManyField(
         "self",

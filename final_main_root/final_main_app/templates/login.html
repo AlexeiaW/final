@@ -1,15 +1,27 @@
 {% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
 
-<h1>Login</h1>
+<div class="card border-light mb-3">
+  <div class="card-header">Login</div>
+  <div class="card-body">
+    <h5 class="card-title">Welcome</h5>
+    <p class="card-text">Here you can login to use the platform.</p>
+    <form id="login_form" method="post" action="/login/">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="text" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+          placeholder="Enter username">
+        <small id="emailHelp" class="form-text text-muted">We'll never share your username with anyone else.</small>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+      </div>
+      <input class="btn btn-primary" type="submit" value="submit" />
+    </form>
+    <footer><small>Peer Support Platform</small></footer>
+  </div>
+</div>
 
-<form id="login_form" method="post" action="/login/">
-  {% csrf_token %} Username:
-  <input type="text" name="username" value="" size="50" />
-  <br />
-  Password: <input type="password" name="password" value="" size="50" />
-  <br />
-
-  <input type="submit" value="submit" />
-</form>
 
 {% endblock %}

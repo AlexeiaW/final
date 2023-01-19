@@ -1,21 +1,22 @@
 {% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
-<h1>Register</h1>
 
-{% if registered %}
-<strong>thank you for registering</strong>
-{% else %}
-<strong>register here</strong><br />
+<div class="card border-light mb-3">
+  <div class="card-header">Register</div>
+  <div class="card-body">
+    <h5 class="card-title">Welcome</h5>
+    <p class="card-text">Here you can register to use the platform.</p>
+    {% if registered %}
+    <strong>thank you for registering</strong>
+    {% else %}
+    <form id="user_form" method="post" action="/register/" enctype="multipart/form-data">
+      {% csrf_token %} {{ user_form.as_p }} {{ profile_form.as_p }}
 
-<form
-  id="user_form"
-  method="post"
-  action="/register/"
-  enctype="multipart/form-data"
->
-  {% csrf_token %} {{ user_form.as_p }} {{ profile_form.as_p }}
+      <input class="btn btn-primary" type="submit" name="submit" value="Register" />
+    </form>
+    {% endif %}
+    <footer><small>Peer Support Platform</small></footer>
+  </div>
+</div>
 
-  <input type="submit" name="submit" value="Register" />
-</form>
-{% endif %}
-<br />
+
 {% endblock %}

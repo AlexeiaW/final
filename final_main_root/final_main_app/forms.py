@@ -73,15 +73,9 @@ class StoryForm(forms.ModelForm):
 class QuestionForm(forms.ModelForm):
     category = forms.ModelChoiceField(queryset=Category.objects.all(
     ), empty_label="Choose a category", label='Category')
-    # user = forms.ModelChoiceField(
-    #     widget=forms.HiddenInput,
-    #     queryset=AppUser.objects.all(),
-    #     disabled=True,
-    # )
 
     class Meta:
         model = Question
-        # fields = ['title', 'content', 'user', 'category']
         fields = ['title', 'category']
 
     def __init__(self, *args, **kwargs):
@@ -91,26 +85,9 @@ class QuestionForm(forms.ModelForm):
 
 
 class AnswerForm(forms.ModelForm):
-    # user = forms.ModelChoiceField(
-    #     widget=forms.HiddenInput,
-    #     queryset=AppUser.objects.all(),
-    #     disabled=True,
-    # )
-    # question = forms.ModelChoiceField(
-    #     widget=forms.HiddenInput,
-    #     queryset=Question.objects.all(),
-    #     disabled=True,
-    # )
-
     class Meta:
         model = Answer
-        # fields = ['content', 'user', 'question', ]
         fields = []
-
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     for myField in self.fields:
-    #         self.fields[myField].widget.attrs['class'] = 'form-control'
 
 
 class ContentForm(forms.ModelForm):
