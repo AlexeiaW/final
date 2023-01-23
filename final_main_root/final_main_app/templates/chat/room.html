@@ -30,6 +30,7 @@
     </div>
     <div class="box-footer">
       <form action="#" method="post">
+        {% csrf_token %}
         <div class="input-group">
           <input id="chat-message-input" type="text" name="message" placeholder="Type Message ..." class="form-control">
           <span class="input-group-btn">

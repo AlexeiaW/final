@@ -147,6 +147,12 @@ class Answer(models.Model):
                                  on_delete=models.CASCADE)
     upvotes = models.IntegerField(default=0)
     down_votes = models.IntegerField(default=0)
+    replies = models.ManyToManyField(
+        "self",
+        related_name="answer_replies",
+        symmetrical=False,
+        blank=True
+    )
 
     class Meta:
         ordering = ('-created', )

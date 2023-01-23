@@ -141,6 +141,7 @@ def index(request):
 
         appuser_object = AppUser.objects.filter(pk=request.user.appuser.id)
 
+        # Maybe weight a story more than likes perhaps (times it by the weight)
         appuser_score = appuser_object.annotate(
             upvote_sum=Sum('user_answers__upvotes'))
 
@@ -153,8 +154,9 @@ def index(request):
 
         similar_users = []
         try:
+            # use prefetch here
             similar_users = AppUser.objects.filter(
-                interests=request.user.appuser.interests.first().id)
+                interests__in=request.user.appuser.interests.all()).distinct()
         except:
             print("An exception occurred")
 
