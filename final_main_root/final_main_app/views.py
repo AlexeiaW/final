@@ -152,11 +152,24 @@ def index(request):
             if (item.id == appuser_id):
                 rank = index + 1
 
-        similar_users = []
+        suggested_users = []
+        suggested_stories = []
+        suggested_groups = []
+        suggested_questions = []
         try:
             # use prefetch here
-            similar_users = AppUser.objects.filter(
-                interests__in=request.user.appuser.interests.all()).distinct()
+            # suggest users, stories, groups, questions that are interested in the same categories as the logged in user
+            suggested_users = AppUser.objects.filter(
+                interests__in=request.user.appuser.interests.all()).exclude(user=request.user).distinct()
+
+            suggested_stories = Story.objects.filter(
+                category__in=request.user.appuser.interests.all()).exclude(author__user__user=request.user).distinct()
+
+            suggested_groups = Group.objects.filter(
+                category__in=request.user.appuser.interests.all()).exclude(users__user=request.user).distinct()
+
+            suggested_questions = Question.objects.filter(
+                category__in=request.user.appuser.interests.all()).exclude(user__user=request.user).distinct()
         except:
             print("An exception occurred")
 
@@ -164,7 +177,10 @@ def index(request):
             'appuser': request.user.appuser,
             'users_sorted':  users_sorted,
             'rank': rank,
-            'similar_users': similar_users,
+            'suggested_users': suggested_users,
+            'suggested_stories': suggested_stories,
+            'suggested_groups': suggested_groups,
+            'suggested_questions': suggested_questions,
             'appuser_score': appuser_score
         })
 

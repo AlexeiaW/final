@@ -6,7 +6,7 @@
 
     <div id="results" style="display: flex;flex-wrap: wrap; align-items: flex-start;">
       <!-- Story recommendations -->
-      {% for story in appuser.interests.first.category_stories.all %}
+      {% for story in suggested_stories %}
       <div class="card mr-4" style="width: 18rem;">
         <div class="card-body">
           <h5 class="card-title">{{story}}</h5>
@@ -28,7 +28,7 @@
       {% endfor %}
 
       <!-- Group recommendations -->
-      {% for group in appuser.interests.first.category_groups.all %}
+      {% for group in suggested_groups %}
       <div class="card mr-4" style="width: 18rem;">
         <div class="card-body">
           <h5 class="card-title">{{group.name}}</h5>
@@ -39,7 +39,7 @@
       {% endfor %}
 
       <!-- Question recommendations -->
-      {% for question in appuser.interests.first.category_questions.all %}
+      {% for question in suggested_questions %}
       <div class="card mr-4" style="width: 18rem;">
         <div class="card-body">
           <h5 class="card-title">{{question.title}}</h5>
@@ -60,7 +60,7 @@
       {% endfor %}
 
       <!-- User recommendations -->
-      {% for appuser in similar_users %}
+      {% for appuser in suggested_users %}
       <div class="card mr-4" style="width:fit-content;">
         <img class="mx-auto" src="{{appuser.images.first.thumbnail.url}}" alt="Card image cap">
         <div class="card-body">
@@ -184,6 +184,8 @@
 </div>
 
 <!-- score modal -->
+
+<style></style>
 
 {% include "./modal_score.html" %}
 
