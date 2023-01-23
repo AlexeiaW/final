@@ -14,9 +14,18 @@ import string
 
 class UserFactory(factory.django.DjangoModelFactory):
     username = factory.Faker('user_name')
+    password = '1234'
 
     class Meta:
         model = User
+
+
+class CategoryFactory(factory.django.DjangoModelFactory):
+    slug = factory.Faker('word')
+    name = slug
+
+    class Meta:
+        model = Category
 
 
 class AppUserFactory(factory.django.DjangoModelFactory):

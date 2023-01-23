@@ -1,19 +1,19 @@
-import json
+from .api import *
+from .model_factories import *
+from .models import *
+from .serializers import *
+from .views import *
+from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.messages.storage.fallback import FallbackStorage
 from django.test import TestCase, RequestFactory, Client
 from django.urls import reverse
 from django.urls import reverse_lazy
-
 from rest_framework.test import APIRequestFactory
 from rest_framework.test import APITestCase
-
-from .model_factories import *
-from .serializers import *
-from django.contrib.auth.models import AnonymousUser, User
-
-from .views import *
-from .api import *
-from .models import *
-from django.contrib.messages.storage.fallback import FallbackStorage
+import factory
+import json
+from http import HTTPStatus
+from django.contrib.sessions.middleware import SessionMiddleware
 
 
 class TestUserCanCreateImageAndViewListOfOwnImages(TestCase):
@@ -65,7 +65,6 @@ class TestUserCanAddFriendsSuccessfully(TestCase):
         # logged-in user by setting request.user manually.
         request.user = self.user
 
-        # Use this syntax for class-based views.
         response = addFriend(request, self.friend1.user.username)
 
         response.client = Client()
@@ -99,3 +98,32 @@ class TestUserCanAddFriendsSuccessfully(TestCase):
 
         # check that user has one friend
         self.assertEqual(fresh_app_user.friends.count(), 1)
+
+
+class TestUserCanCreateQuestion(TestCase):
+    def setUp(self):
+        appuser = AppUserFactory.create()
+        self.category = CategoryFactory.create()
+        self.user = appuser.user
+        self.factory = RequestFactory()
+
+    def test_add_question_endpoint_redirect_success(self):
+        title = 'Test title test_add_question_endpoint_redirect_success'
+        request = self.factory.post('/ask-question/', data={
+            'category': self.category.id,
+            'title': title,
+            'content': '{"delta":"{\\"ops\\":[{\\"insert\\":\\"Lorem Ipsum\\"},{\\"attributes\\":{\\"align\\":\\"center\\",\\"header\\":1},\\"insert\\":\\"\\\\n\\"},{\\"attributes\\":{\\"italic\\":true},\\"insert\\":\\"\\\\\\"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\\\\\\"\\"},{\\"attributes\\":{\\"align\\":\\"center\\",\\"header\\":4},\\"insert\\":\\"\\\\n\\"},{\\"insert\\":\\"\\\\\\"There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...\\\\\\"\\"},{\\"attributes\\":{\\"align\\":\\"center\\",\\"header\\":5},\\"insert\\":\\"\\\\n\\"},{\\"insert\\":\\"\\\\n\\"}]}","html":"<h1 class=\\"ql-align-center\\">Lorem Ipsum</h1><h4 class=\\"ql-align-center\\"><em>\\"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\\"</em></h4><h5 class=\\"ql-align-center\\">\\"There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...\\"</h5><p><br></p>"}',
+            'action': 'SAVE'
+        })
+
+        setattr(request, 'session', 'session')
+        setattr(request, '_messages', FallbackStorage(request))
+
+        request.user = self.user
+        response = AskQuestionView.as_view()(request)
+        self.assertEqual(response.status_code, 302)
+
+        question = Question.objects.all().first()
+
+        self.assertEqual(question.title, title)
+        self.assertEqual(question.user.id, self.user.id)
