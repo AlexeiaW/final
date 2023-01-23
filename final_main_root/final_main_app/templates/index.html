@@ -4,7 +4,7 @@
   <div class="card-header">{{ appuser.user.username }} based on your interests we suggest...</div>
   <div class="card-body">
 
-    <div id="results" style="display: flex;flex-wrap: wrap; align-items: flex-start;">
+    <div id="results">
       <!-- Story recommendations -->
       {% for story in suggested_stories %}
       <div class="card mr-4" style="width: 18rem;">
@@ -185,7 +185,17 @@
 
 <!-- score modal -->
 
-<style></style>
+<style>
+  #results {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  #results .card {
+    margin-top: 1.5rem;
+  }
+</style>
 
 {% include "./modal_score.html" %}
 
