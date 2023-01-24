@@ -19,6 +19,19 @@ class Category(models.Model):
         return self.name
 
 
+class Role(models.Model):
+    ROLES = (
+        ('peer', 'peer'),
+        ('counselor', 'counselor'),
+        ('coach', 'coach'),
+        ('support_buddy', 'support_buddy'),
+    )
+    name = models.CharField(max_length=50, choices=ROLES, null=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Content(models.Model):
     content = QuillField()
     created_on = models.DateTimeField(
@@ -31,6 +44,9 @@ class AppUser(models.Model):
     organisation = models.CharField(max_length=256, null=True, blank=True)
     status = models.TextField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    role = models.OneToOneField(
+        Role, on_delete=models.SET_NULL,  null=True, blank=True, default=None)
+
     friends = models.ManyToManyField(
         "self",
         related_name="appuser_friends",

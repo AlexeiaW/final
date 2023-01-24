@@ -137,7 +137,7 @@ def index(request):
         return render(request, 'index.html')
     else:
         users_sorted = AppUser.objects.annotate(
-            upvote_sum=Sum('user_answers__upvotes')).order_by('-upvote_sum')
+            upvote_sum=Sum('user_answers__upvotes')).order_by('-upvote_sum')[:10]
 
         appuser_object = AppUser.objects.filter(pk=request.user.appuser.id)
 

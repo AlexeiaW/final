@@ -35,6 +35,9 @@
           html += `<p>There were no users found with user name ${formProps.username}</p>`;
         }
         data.forEach(function (obj) {
+          if (!obj.image.thumbnail) {
+            obj.image.thumbnail = '/static/final_main_app/user.png'
+          }
           html += `
           <div class="card mr-4 mt-4" style="width:fit-content;">
             <img class="mx-auto p-3" src="${obj.image.thumbnail}" alt="Card image cap">

@@ -1,12 +1,16 @@
 {% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
-
+{% load static %}
 <div class="card border-light mb-3">
   <div class="card-header">Your friends</div>
   <div class="card-body">
     <div id="results">
       {% for friend in appuser.friends.all %}
       <div class="card m-4" style="width: 18rem;">
+        {% if friend.images.count > 0 %}
         <img class="mx-auto p-3" src="{{friend.images.first.thumbnail.url}}" alt="Card image cap">
+        {% else %}
+        <img class="mx-auto p-3" src="{% static '/final_main_app/user.png' %}" alt="Card image cap">
+        {% endif %}
         <div class="card-body">
           <h5 class="card-title">{{friend}}</h5>
           <p class="card-title">{{friend.user.first_name}} {{friend.user.last_name}}</p>

@@ -1,4 +1,5 @@
 {% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
+{% load static %}
 
 <div class="card border-light mb-3">
     <div class="card-header">{{ group.name }} group page</div>
@@ -30,7 +31,11 @@
     <div class="card-body results">
         {% for obj in group.users.all %}
         <div class="card m-4" style="width:fit-content;">
+            {% if obj.images.count > 0 %}
             <img class="mx-auto p-3" src="{{obj.images.first.thumbnail.url}}" alt="Card image cap">
+            {% else %}
+            <img class="mx-auto p-3" src="{% static '/final_main_app/user.png' %}" alt="Card image cap">
+            {% endif %}
             <div class="card-body">
                 <h5 class="card-title">{{obj.user.username}}</h5>
                 <p class="item">{{obj.user.first_name}} {{obj.user.last_name}}</p>
