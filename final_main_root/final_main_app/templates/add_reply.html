@@ -1,0 +1,30 @@
+{% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
+{% load static %}
+
+<div class="card border-light mb-3">
+    <div class="card-header">Add your reply to {{ answer.user }}'s answer</div>
+    <div class="card-body">
+        <form id="user_form" method="post" action="{% url "final_main_app:add_reply" pk=answer.id %}"
+            enctype="multipart/form-data">
+            {% csrf_token %} {{ answer_form.as_p }} {{ content.as_p }}
+
+            <input type="submit" name="submit" value="Reply" />
+        </form>
+    </div>
+</div>
+
+<div class="card border-light mb-3">
+    <div class="card-header">Answer by {{ answer.user }} on {{ answer.created|date }}</div>
+    <div class="card-body">
+        <p class="item">{{ answer.content.content.html|safe }}</p>
+    </div>
+</div>
+
+<script>
+
+</script>
+
+<style>
+
+</style>
+{% endblock %}

@@ -2,7 +2,11 @@ from .models import *
 from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django import forms
+from django_quill.forms import QuillFormField
 
+
+class QuillFieldForm(forms.Form):
+    content = QuillFormField()
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -89,6 +93,10 @@ class AnswerForm(forms.ModelForm):
         model = Answer
         fields = []
 
+class ReplyForm(forms.ModelForm):
+    class Meta:
+        model = Reply
+        fields = []
 
 class ContentForm(forms.ModelForm):
 

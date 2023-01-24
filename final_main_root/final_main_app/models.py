@@ -152,8 +152,12 @@ class Question(models.Model):
         return reverse('final_main_app:question_detail', kwargs={'pk': self.id})
 
 
+
+
+    class Meta:
+        ordering = ('-created', )
+
 class Answer(models.Model):
-    # answer = QuillField()
     content = models.OneToOneField(Content, on_delete=models.CASCADE)
 
     user = models.ForeignKey(AppUser, related_name='user_answers',
@@ -163,12 +167,20 @@ class Answer(models.Model):
                                  on_delete=models.CASCADE)
     upvotes = models.IntegerField(default=0)
     down_votes = models.IntegerField(default=0)
-    replies = models.ManyToManyField(
-        "self",
-        related_name="answer_replies",
-        symmetrical=False,
-        blank=True
-    )
+    
 
     class Meta:
         ordering = ('-created', )
+
+class Reply(models.Model):
+    content = models.OneToOneField(Content, on_delete=models.CASCADE)
+
+    user = models.ForeignKey(AppUser, related_name='user_replies',
+                             on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    question = models.ForeignKey(to=Question, related_name='replies',
+                                 on_delete=models.CASCADE)
+    upvotes = models.IntegerField(default=0)
+    down_votes = models.IntegerField(default=0)
+    answer = models.ForeignKey(to=Answer, related_name='replies',
+                                 on_delete=models.CASCADE)

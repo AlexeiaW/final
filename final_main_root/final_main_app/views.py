@@ -254,6 +254,34 @@ def addFriend(request, friend_username):
 
 
 @login_required
+def addReply(request, pk):
+    answer = Answer.objects.get(pk=pk)
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return render(request, 'index.html')
+        reply_form = ReplyForm(data=request.POST)
+        content_form = ContentForm(data=request.POST)
+        if reply_form.is_valid() and content_form.is_valid():
+            reply = reply_form.save(commit=False)
+            reply.user = request.user.appuser
+            reply.content = content_form.save()
+            reply.question=answer.question
+            reply.answer=answer
+            reply.save()
+
+            messages.success(request,
+                             'Your reply was successfully created!',
+                             extra_tags='alert-success')
+            return HttpResponseRedirect('/question/' + str(answer.question.pk))
+    else:
+        return render(request, 'add_reply.html', {
+            'answer': answer,
+            'answer_form': AnswerForm(),
+            'content': ContentForm(),
+        })
+
+
+@ login_required
 def joinGroup(request, group_name):
     # This is the authenticated user, who is initiating the group connection
     appuser = AppUser.objects.get(id=request.user.appuser.id)
@@ -470,6 +498,7 @@ class AskQuestionView(LoginRequiredMixin, CreateView):
 class QuestionDetailView(DetailView):
     model = Question
     template_name = 'question_detail.html'
+    second_form_class = QuillFieldForm()
 
     def get_initial(self):
         return {
@@ -484,6 +513,7 @@ class QuestionDetailView(DetailView):
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
         context['answer'] = AnswerForm()
         context['content'] = ContentForm()
+
         return context
 
 

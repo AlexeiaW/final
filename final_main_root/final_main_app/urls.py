@@ -30,6 +30,8 @@ urlpatterns = [
     path('add-friends/', views.addFriends, name='add_friends'),
     path('add-friend/<str:friend_username>/',
          login_required(login_url='../login/')(views.addFriend), name='add_friend'),
+    path('add-reply/<int:pk>/',
+         login_required(login_url='../login/')(views.addReply), name='add_reply'),
     path('join-group/<str:group_name>/',
          login_required(login_url='../login/')(views.joinGroup), name='join_group'),
     path('my-friends/', login_required(login_url='../login/')
