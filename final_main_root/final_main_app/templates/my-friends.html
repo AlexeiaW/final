@@ -6,7 +6,7 @@
     <div id="results">
       {% for friend in appuser.friends.all %}
       <div class="card m-4" style="width: 18rem;">
-        <img class="mx-auto" src="{{friend.images.first.thumbnail.url}}" alt="Card image cap">
+        <img class="mx-auto p-3" src="{{friend.images.first.thumbnail.url}}" alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title">{{friend}}</h5>
           <p class="card-title">{{friend.user.first_name}} {{friend.user.last_name}}</p>

@@ -1,5 +1,5 @@
 {% extends "./base.html" %} {% block content %} {% if user.is_authenticated %}
-<br />
+{% load static %}
 <div class="card border-light mb-3">
   <div class="card-header">{{ appuser.user.username }} based on your interests we suggest...</div>
   <div class="card-body">
@@ -62,7 +62,13 @@
       <!-- User recommendations -->
       {% for appuser in suggested_users %}
       <div class="card mr-4" style="width:fit-content;">
-        <img class="mx-auto" src="{{appuser.images.first.thumbnail.url}}" alt="Card image cap">
+        {% if appuser.images.count > 0 %}
+        <img class="mx-auto p-3" src="{{appuser.images.first.thumbnail.url}}" alt="Card image cap">
+        {% else %}
+        <img class="mx-auto p-3" src="{% static '/final_main_app/user.png' %}" alt="Card image cap">
+        {% endif %}
+
+
         <div class="card-body">
           <h5 class="card-title">{{appuser.user.username}}</h5>
           <p class="item">{{appuser.user.first_name}} {{appuser.user.last_name}}</p>
@@ -124,7 +130,7 @@
 
     <!-- User overview -->
     <div class="card mr-4" style="width: 18rem;">
-      <img class="mx-auto" src="{{appuser.images.first.thumbnail.url}}" alt="Card image cap">
+      <img class="mx-auto p-3" src="{{appuser.images.first.thumbnail.url}}" alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">{{appuser.user.username}}</h5>
       </div>

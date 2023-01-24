@@ -30,7 +30,7 @@
     <div class="card-body results">
         {% for obj in group.users.all %}
         <div class="card m-4" style="width:fit-content;">
-            <img class="mx-auto" src="{{obj.images.first.thumbnail.url}}" alt="Card image cap">
+            <img class="mx-auto p-3" src="{{obj.images.first.thumbnail.url}}" alt="Card image cap">
             <div class="card-body">
                 <h5 class="card-title">{{obj.user.username}}</h5>
                 <p class="item">{{obj.user.first_name}} {{obj.user.last_name}}</p>

@@ -13,10 +13,41 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-8 offset-md-2 content" id="base_div">
-      <!-- <div class="col-12 content"> -->
       {% block content %}Didn't render content{% endblock %}
     </div>
   </div>
 </div>
 
+<style>
+  div .card {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  }
+
+  nav {
+    margin-bottom: 1.5rem;
+  }
+</style>
+<script>
+  // window.addEventListener('load', () => {
+  //   const dropdown = document.querySelector('.dropdown');
+
+  //   // min-width changed to max-width
+  //   if (window.matchMedia('(max-width: 769px)').matches) {
+  //     document.getElementById("base_div").className = "col-12 content";
+  //   } else {
+  //     document.getElementById("base_div").className = "col-md-8 offset-md-2 content";
+  //   }
+  // });
+
+  // window.addEventListener('resize', () => {
+  //   const dropdown = document.querySelector('.dropdown');
+
+  //   // min-width changed to max-width
+  //   if (window.matchMedia('(max-width: 769px)').matches) {
+  //     document.getElementById("base_div").className = "col-12 content";
+  //   } else {
+  //     document.getElementById("base_div").className = "col-md-8 offset-md-2 content";
+  //   }
+  // });
+</script>
 {% include "./footer.html" %}
