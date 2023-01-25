@@ -1,5 +1,5 @@
 {% extends "./base.html" %} {% load bootstrap4 %} {% block content %}
-
+{% load static %}
 
 <div class="card border-light mb-3">
     <div class="card-header">Written by {{story.author.first_name}} {{story.author.last_name}}</div>
@@ -17,4 +17,61 @@
 </div>
 
 
+<div class="card border-light mb-3">
+    <div class="card-header">If you are inspired by this story by {{story.author.first_name}} {{story.author.last_name}}
+    </div>
+    <div class="card-body">
+        <p class="card-text">Here are some groups that are in the same category</p>
+        <div id="results" style="display: flex;flex-wrap: wrap; align-items: flex-start;">
+            {% for group in story.category.category_groups.all|slice:":10" %}
+            {%if request.user.appuser not in group.users.all %} <!-- exclude groups the user already is a part of -->
+            <div class="card mr-4" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{group.name}}</h5>
+                    <p class="card-text">{{group.description}}</p>
+                    <a href="/group/{{group.pk}}" class="card-link">View</a>
+                </div>
+            </div>
+            {%endif %}
+            {% endfor %}
+        </div>
+        <hr />
+        <p class="card-text">Here are some questions that are in the same category</p>
+        <div id="results" style="display: flex;flex-wrap: wrap; align-items: flex-start;">
+            {% for question in story.category.category_questions.all|slice:":10" %}
+            {%if request.user.pk != question.user.user.pk %} <!-- exclude users own questions -->
+            <div class="card mr-4" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{question.title}}</h5>
+                    <p class="card-text">{{question.description}}</p>
+                    <a href="/question/{{question.id}}" class="card-link">View</a>
+                </div>
+            </div>
+            {%endif %}
+            {% endfor %}
+        </div>
+        <hr />
+        <p class="card-text">Here are peers that are interested in the same category</p>
+        <div id="results" style="display: flex;flex-wrap: wrap; align-items: flex-start;">
+            {% for appuser in story.category.categories_appusers.all|slice:":10" %}
+            {%if request.user.pk != appuser.user.pk %} <!-- exclude users own profile -->
+            <div class="card m-4" style="width: 18rem;">
+                {% if appuser.images.count > 0 %}
+                <img class="mx-auto p-3" src="{{appuser.images.first.thumbnail.url}}" alt="Card image cap">
+                {% else %}
+                <img class="mx-auto p-3" src="{% static '/final_main_app/user.png' %}" alt="Card image cap">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{appuser}}</h5>
+                    <p class="card-title">{{appuser.user.first_name}} {{appuser.user.last_name}}</p>
+                    <a href="/add-friend/{{appuser.user.username}}" class="card-link">Add friend</a>
+                </div>
+            </div>
+            {%endif %}
+            {% endfor %}
+        </div>
+        <!-- <p class="card-text">{{story.description }}</p> -->
+        <!-- <a class="btn btn-primary" role="button" id="room_url" href="/chat/{{group.chat}}/">Enter</a>-->
+    </div>
+</div>
 {% endblock %}
