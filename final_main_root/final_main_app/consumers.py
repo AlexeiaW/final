@@ -28,9 +28,15 @@ class ChatConsumer(WebsocketConsumer):
 
     # Receive message from WebSocket
     def receive(self, text_data):
+        user_profile_photo = "/static/final_main_app/user.png"
+
+        try:
+            user_profile_photo = self.user.appuser.images.first().thumbnail.url
+        except:
+            print("An exception occurred")
+
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-        user_profile_photo = self.user.appuser.images.first().thumbnail.url
         now = datetime.now()
 
         # Send message to room group
@@ -41,6 +47,7 @@ class ChatConsumer(WebsocketConsumer):
                 'message': message,
                 'username': self.user.username,
                 'thumbnail': user_profile_photo,
+                'role': self.user.appuser.role,
                 'message_time_stamp': now.strftime("%d %B %H:%M")
             }
         )

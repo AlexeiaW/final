@@ -151,11 +151,9 @@ class Question(models.Model):
     def get_absolute_url(self):
         return reverse('final_main_app:question_detail', kwargs={'pk': self.id})
 
-
-
-
     class Meta:
         ordering = ('-created', )
+
 
 class Answer(models.Model):
     content = models.OneToOneField(Content, on_delete=models.CASCADE)
@@ -167,10 +165,10 @@ class Answer(models.Model):
                                  on_delete=models.CASCADE)
     upvotes = models.IntegerField(default=0)
     down_votes = models.IntegerField(default=0)
-    
 
     class Meta:
         ordering = ('-created', )
+
 
 class Reply(models.Model):
     content = models.OneToOneField(Content, on_delete=models.CASCADE)
@@ -183,4 +181,4 @@ class Reply(models.Model):
     upvotes = models.IntegerField(default=0)
     down_votes = models.IntegerField(default=0)
     answer = models.ForeignKey(to=Answer, related_name='replies',
-                                 on_delete=models.CASCADE)
+                               on_delete=models.CASCADE)

@@ -9,19 +9,12 @@
 <!-- Chat section -->
 <div class="row bootstrap snippets ml-1 mr-1 max-width-chat">
   <div class="box box-primary direct-chat direct-chat-primary">
-
     <!-- Box header -->
     <div class="box-header with-border">
       <h3 class="box-title">Chat</h3>
 
       <div class="box-tools pull-right">
-        <span data-toggle="tooltip" title="" class="badge bg-light-blue" data-original-title="3 New Messages">3</span>
-        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-        </button>
-        <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="Contacts"
-          data-widget="chat-pane-toggle">
-          <i class="fa fa-comments"></i></button>
-        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        <button type="button" class="btn btn-primary" onclick="clearChatMessages()">Clear chat</button>
       </div>
     </div>
     <div class="box-body">
@@ -49,9 +42,22 @@
     "ws://" + window.location.host + "/ws/chat/" + roomName + "/"
   );
 
+
+  const pluck = property => element => element[property]
+  let chat_history_local_storage = JSON.parse(localStorage.getItem('chat_history_local_storage'))
+  if (!chat_history_local_storage) {
+    chat_history_local_storage = []
+  } else {
+    console.log(chat_history_local_storage)
+  }
+
+  let displayData = chat_history_local_storage.map(pluck('html')).join(" ").trim()
+  document.getElementById("direct-chat-messages").innerHTML = displayData;
+
   chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
     let html = ``
+    // Here we differentiate between the sending user message and receiving user message
     if (!data.own_message) {
       html = `
         <!-- Message. Default to the left -->
@@ -83,12 +89,21 @@
           `;
     }
 
-    document.getElementById("direct-chat-messages").innerHTML += html;
+
+
+    chat_history_local_storage.push({ 'html': html })
+    localStorage.setItem('chat_history_local_storage', JSON.stringify(chat_history_local_storage));
+
+    displayData = chat_history_local_storage.map(pluck('html')).join(" ").trim()
+    document.getElementById("direct-chat-messages").innerHTML = displayData;
 
   };
 
   chatSocket.onclose = function (e) {
     console.error("Chat socket closed unexpectedly");
+    if (confirm("The chat encountered an error while connecting. Would you like to reload the page to try a reconnect?")) {
+      location.reload()
+    }
   };
 
   document.querySelector("#chat-message-input").focus();
@@ -112,6 +127,15 @@
     );
     messageInputDom.value = "";
   };
+
+
+  function clearChatMessages(params) {
+    localStorage.clear();
+    if (confirm("Are you sure you want to clear the chat history?")) {
+      localStorage.clear();
+      location.reload()
+    }
+  }
 </script>
 
 <style>
