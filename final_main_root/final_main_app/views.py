@@ -221,7 +221,7 @@ def room(request, room_name):
     chat = Chat.objects.get(room_id=room_name)
     return render(request, 'chat/room.html', {
         'room_name': room_name,
-        'group_name': chat.group
+        'group': chat.group
     })
 
 
@@ -265,8 +265,8 @@ def addReply(request, pk):
             reply = reply_form.save(commit=False)
             reply.user = request.user.appuser
             reply.content = content_form.save()
-            reply.question=answer.question
-            reply.answer=answer
+            reply.question = answer.question
+            reply.answer = answer
             reply.save()
 
             messages.success(request,
