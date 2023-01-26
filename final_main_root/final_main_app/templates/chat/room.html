@@ -175,6 +175,9 @@
 
   chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
+
+    if (data.message_type == 'user_status_message') { alert('Hi') }
+
     let html = ``
     // Here we differentiate between the sending user message and receiving user message
     if (!data.own_message) {
@@ -249,6 +252,15 @@
     );
     messageInputDom.value = "";
   };
+
+
+  setInterval(function () {
+    chatSocket.send(
+      JSON.stringify({
+        user_status: 'ONLINE',
+      })
+    );
+  }, 5000);
 
 
   function clearChatMessages(params) {

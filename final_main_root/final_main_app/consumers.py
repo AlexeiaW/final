@@ -28,14 +28,31 @@ class ChatConsumer(WebsocketConsumer):
 
     # Receive message from WebSocket
     def receive(self, text_data):
-        user_profile_photo = "/static/final_main_app/user.png"
+        text_data_json = json.loads(text_data)
+        print(text_data_json)
+        try:
+            user_status = text_data_json['user_status']
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {
+                    'type': 'user_status_message',
+                    'user_status': user_status,
+                    'username': self.user.username,
+                    'message_time_stamp': now.strftime("%d %B %H:%M")
+                }
+            )
+            return
+        except:
+            print("An exception occurred user status")
 
+        # ------------
+
+        user_profile_photo = "/static/final_main_app/user.png"
         try:
             user_profile_photo = self.user.appuser.images.first().thumbnail.url
         except:
-            print("An exception occurred")
+            print("An exception occurred user profile")
 
-        text_data_json = json.loads(text_data)
         message = text_data_json['message']
         now = datetime.now()
 
@@ -53,6 +70,7 @@ class ChatConsumer(WebsocketConsumer):
         )
 
     # Receive message from room group
+
     def chat_message(self, event):
         message = event['message']
         username = event['username']
@@ -70,4 +88,18 @@ class ChatConsumer(WebsocketConsumer):
             'thumbnail': user_profile_photo,
             'message_time_stamp': message_time_stamp,
             'own_message': own_message
+        }))
+
+    # Receive message from room group
+    def user_status_message(self, event):
+        username = event['username']
+        user_status = event['user_status']
+        message_time_stamp = event['message_time_stamp']
+        message_type = event['type']
+        # Send message to WebSocket
+        self.send(text_data=json.dumps({
+            'username': username,
+            'message_type': message_type,
+            'user_status': user_status,
+            'message_time_stamp': message_time_stamp,
         }))
