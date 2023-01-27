@@ -7,8 +7,10 @@
 {{ room_name|json_script:"room-name" }}
 
 <!-- Chat section -->
-<div class="row bootstrap snippets ml-1 mr-1 max-width-chat">
-  <div class="box box-primary direct-chat direct-chat-primary">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-start;">
+
+  <!-- Chat box -->
+  <div class="box box-primary direct-chat direct-chat-primary max-width-chat mr-4">
     <!-- Box header -->
     <div class="box-header with-border">
       <h3 class="box-title">Chat</h3>
@@ -33,30 +35,34 @@
       </form>
     </div>
   </div>
-</div>
 
-
-<div class="card border-light mb-3">
-  <div class="card-header">{{ group.name }} group members</div>
-  <div class="card-body results">
+  <!-- user online status -->
+  <div class="results max-width-chat">
     {% for obj in group.users.all %}
-    <div class="card m-4" style="width:fit-content;" id="{{obj.user.username}}">
+    <div class="mr-2 p-2 card" id="{{obj.user.username}}"
+      style="display: flex; flex-wrap: nowrap; align-items: center; justify-content: center; border-radius: 3px; border-top-color: #3c8dbc;">
+      <!-- image -->
       {% if obj.images.count > 0 %}
-      <img class="mx-auto p-3" src="{{obj.images.first.thumbnail.url}}" alt="Card image cap">
+      <img class="max-width-image mr-1" src="{{obj.images.first.thumbnail.url}}" alt="Card image cap">
       {% else %}
-      <img class="mx-auto p-3" src="{% static '/final_main_app/user.png' %}" alt="Card image cap">
+      <img class="max-width-image mr-1" src="{% static '/final_main_app/user.png' %}" alt="Card image cap">
       {% endif %}
-      <div class="card-body">
-        <h5 class="card-title">{{obj.user.username}}</h5>
-        <p class="item">{{obj.user.first_name}} {{obj.user.last_name}}</p>
+      <!-- end image -->
+      <div style="display: flex;flex-wrap: nowrap; flex-direction: column;">
+        <small>{{obj.user.username}}</small>
+        <small>{{obj.user.first_name}} {{obj.user.last_name}}</small>
       </div>
     </div>
     {% endfor %}
   </div>
+
 </div>
+
 
 <!--  -->
 <script>
+  document.getElementById("base_div").className = "col-12 content";
+
   // to store element and its priority
   class QElement {
     constructor(element, priority) {
@@ -307,6 +313,10 @@
 
   .max-width-chat {
     max-width: 900px;
+  }
+
+  .max-width-image {
+    max-width: 50px;
   }
 
   .box {
