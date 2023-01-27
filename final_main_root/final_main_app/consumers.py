@@ -30,7 +30,9 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         print(text_data_json)
-        try:
+        now = datetime.now()
+
+        if ('user_status' in text_data_json):
             user_status = text_data_json['user_status']
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
@@ -41,33 +43,28 @@ class ChatConsumer(WebsocketConsumer):
                     'message_time_stamp': now.strftime("%d %B %H:%M")
                 }
             )
-            return
-        except:
-            print("An exception occurred user status")
 
-        # ------------
+        if ('message' in text_data_json):
+            user_profile_photo = "/static/final_main_app/user.png"
+            try:
+                user_profile_photo = self.user.appuser.images.first().thumbnail.url
+            except:
+                print("An exception occurred user profile")
 
-        user_profile_photo = "/static/final_main_app/user.png"
-        try:
-            user_profile_photo = self.user.appuser.images.first().thumbnail.url
-        except:
-            print("An exception occurred user profile")
+            message = text_data_json['message']
 
-        message = text_data_json['message']
-        now = datetime.now()
-
-        # Send message to room group
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message,
-                'username': self.user.username,
-                'thumbnail': user_profile_photo,
-                'role': self.user.appuser.role,
-                'message_time_stamp': now.strftime("%d %B %H:%M")
-            }
-        )
+            # Send message to room group
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': message,
+                    'username': self.user.username,
+                    'thumbnail': user_profile_photo,
+                    'role': self.user.appuser.role,
+                    'message_time_stamp': now.strftime("%d %B %H:%M")
+                }
+            )
 
     # Receive message from room group
 

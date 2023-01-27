@@ -40,7 +40,7 @@
   <div class="card-header">{{ group.name }} group members</div>
   <div class="card-body results">
     {% for obj in group.users.all %}
-    <div class="card m-4" style="width:fit-content;">
+    <div class="card m-4" style="width:fit-content;" id="{{obj.user.username}}">
       {% if obj.images.count > 0 %}
       <img class="mx-auto p-3" src="{{obj.images.first.thumbnail.url}}" alt="Card image cap">
       {% else %}
@@ -176,8 +176,19 @@
   chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
 
-    if (data.message_type == 'user_status_message') { alert('Hi') }
+    // User online status
+    if (data.message_type == 'user_status_message') {
+      console.log(`user online status received ${data.username}: ${data.user_status}`)
+      if (data.user_status == 'ONLINE') {
+        document.getElementById(data.username).classList.add('bg-success')
+      } else if (data.user_status == 'OFFLINE') {
+        document.getElementById(data.username).classList.remove('bg-success')
+        document.getElementById(data.username).classList.add('bg-secondary')
+      }
+      return
+    }
 
+    // User chat message section
     let html = ``
     // Here we differentiate between the sending user message and receiving user message
     if (!data.own_message) {
@@ -254,14 +265,29 @@
   };
 
 
-  setInterval(function () {
-    chatSocket.send(
-      JSON.stringify({
-        user_status: 'ONLINE',
-      })
-    );
-  }, 5000);
+  chatSocket.onopen = function (e) {
 
+    // User status section
+    function sendUserStatus() {
+      chatSocket.send(
+        JSON.stringify({
+          user_status: 'ONLINE',
+        })
+      );
+    }
+    sendUserStatus();
+    setInterval(sendUserStatus, 10000);
+
+    window.addEventListener('beforeunload', function (e) {
+      e.preventDefault();
+      e.returnValue = '';
+      chatSocket.send(
+        JSON.stringify({
+          user_status: 'OFFLINE',
+        })
+      );
+    });
+  };
 
   function clearChatMessages(params) {
     localStorage.clear();
