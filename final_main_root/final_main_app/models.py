@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 import uuid
 from django_quill.fields import QuillField
 from django.urls.base import reverse
+from django.db.models import Count, Sum, F
+
 # The Model that is used to add data to the auth user model. AppUser is mainly used as the "user" and will create relationships between friends
 
 
@@ -153,6 +155,11 @@ class Question(models.Model):
 
     class Meta:
         ordering = ('-created', )
+
+    @property
+    def sorted_answer_set_by_upvote_count(self):
+        return self.answers.annotate(
+            upvote_sum=Sum('upvotes')).order_by('-upvote_sum')
 
 
 class Answer(models.Model):

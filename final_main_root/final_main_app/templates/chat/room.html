@@ -191,8 +191,9 @@
         })
       );
     }
-    sendUserStatus();
-    setInterval(sendUserStatus, 2000);
+
+    setTimeout(sendUserStatus, 500);
+    setInterval(sendUserStatus, 5000);
 
     window.addEventListener('beforeunload', function (e) {
       e.preventDefault();
@@ -203,6 +204,14 @@
         })
       );
     });
+
+    window.onbeforeunload = function () {
+      chatSocket.send(
+        JSON.stringify({
+          user_status: 'OFFLINE',
+        })
+      );
+    }
   };
 
   function clearChatMessages(params) {
