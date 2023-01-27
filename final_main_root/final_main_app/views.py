@@ -542,6 +542,7 @@ class CreateAnswerView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(CreateAnswerView, self).get_context_data(
             question=self.get_question(), **kwargs)
+
         if self.request.POST:
             context['content'] = ContentForm(self.request.POST)
             context['answer'] = AnswerForm(self.request.POST)

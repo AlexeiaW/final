@@ -12,6 +12,13 @@ import random
 import string
 
 
+class ContentFactory(factory.django.DjangoModelFactory):
+    content = '{"delta":"{\\"ops\\":[{\\"insert\\":\\"Lorem Ipsum\\"},{\\"attributes\\":{\\"align\\":\\"center\\",\\"header\\":1},\\"insert\\":\\"\\\\n\\"},{\\"attributes\\":{\\"italic\\":true},\\"insert\\":\\"\\\\\\"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\\\\\\"\\"},{\\"attributes\\":{\\"align\\":\\"center\\",\\"header\\":4},\\"insert\\":\\"\\\\n\\"},{\\"insert\\":\\"\\\\\\"There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...\\\\\\"\\"},{\\"attributes\\":{\\"align\\":\\"center\\",\\"header\\":5},\\"insert\\":\\"\\\\n\\"},{\\"insert\\":\\"\\\\n\\"}]}","html":"<h1 class=\\"ql-align-center\\">Lorem Ipsum</h1><h4 class=\\"ql-align-center\\"><em>\\"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\\"</em></h4><h5 class=\\"ql-align-center\\">\\"There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...\\"</h5><p><br></p>"}'
+
+    class Meta:
+        model = Content
+
+
 class UserFactory(factory.django.DjangoModelFactory):
     username = factory.Faker('user_name')
     password = '1234'
@@ -45,6 +52,16 @@ class AppUserFactory(factory.django.DjangoModelFactory):
         if extracted:
             for friends in extracted:
                 self.friends.add(friends)
+
+
+class QuestionFactory(factory.django.DjangoModelFactory):
+    user = factory.SubFactory(AppUserFactory)
+    category = factory.SubFactory(CategoryFactory)
+    content = factory.SubFactory(ContentFactory)
+    title = 'Some question title'
+
+    class Meta:
+        model = Question
 
 
 class ImageFactory(factory.django.DjangoModelFactory):

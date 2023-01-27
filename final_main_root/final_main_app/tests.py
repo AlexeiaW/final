@@ -127,3 +127,30 @@ class TestUserCanCreateQuestion(TestCase):
 
         self.assertEqual(question.title, title)
         self.assertEqual(question.user.id, self.user.id)
+
+
+class TestUserCanCreateAnswer(TestCase):
+    def setUp(self):
+        # appuser = AppUserFactory.create()
+        # self.user = appuser.user
+        self.question = QuestionFactory.create()
+        self.factory = RequestFactory()
+
+    def test_add_answer_endpoint_redirect_success(self):
+        request = self.factory.post('/question/' + str(self.question.id) + '/answer/', data={
+            'action': 'SAVE',
+            'category': self.question.category.id,
+            'question': self.question,
+            'content': '{"delta":"{\\"ops\\":[{\\"insert\\":\\"Lorem Ipsum\\"},{\\"attributes\\":{\\"align\\":\\"center\\",\\"header\\":1},\\"insert\\":\\"\\\\n\\"},{\\"attributes\\":{\\"italic\\":true},\\"insert\\":\\"\\\\\\"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\\\\\\"\\"},{\\"attributes\\":{\\"align\\":\\"center\\",\\"header\\":4},\\"insert\\":\\"\\\\n\\"},{\\"insert\\":\\"\\\\\\"There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...\\\\\\"\\"},{\\"attributes\\":{\\"align\\":\\"center\\",\\"header\\":5},\\"insert\\":\\"\\\\n\\"},{\\"insert\\":\\"\\\\n\\"}]}","html":"<h1 class=\\"ql-align-center\\">Lorem Ipsum</h1><h4 class=\\"ql-align-center\\"><em>\\"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\\"</em></h4><h5 class=\\"ql-align-center\\">\\"There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...\\"</h5><p><br></p>"}',
+        })
+
+        setattr(request, 'session', 'session')
+        setattr(request, '_messages', FallbackStorage(request))
+
+        request.user = self.question.user.user
+        response = CreateAnswerView.as_view()(request, pk=self.question.id)
+        self.assertEqual(response.status_code, 302)
+
+        answer = Answer.objects.all().first()
+
+        self.assertEqual(answer.id, 1)
