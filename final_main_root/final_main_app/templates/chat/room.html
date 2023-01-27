@@ -1,19 +1,18 @@
 <!-- chat/templates/chat/room.html -->
 {% extends "../base.html" %} {% block content %}
 {% load static %}
-<h1>
-  {{group}}
-</h1>
+
+
 {{ room_name|json_script:"room-name" }}
 
 <!-- Chat section -->
-<div style="display: flex; flex-wrap: wrap; align-items: flex-start;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: center;">
 
   <!-- Chat box -->
   <div class="box box-primary direct-chat direct-chat-primary max-width-chat mr-4">
     <!-- Box header -->
     <div class="box-header with-border">
-      <h3 class="box-title">Chat</h3>
+      <h3 class="box-title">{{group}}</h3>
 
       <div class="box-tools pull-right">
         <button type="button" class="btn btn-primary" onclick="clearChatMessages()">Clear chat</button>
@@ -39,13 +38,15 @@
   <!-- user online status -->
   <div class="results max-width-chat">
     {% for obj in group.users.all %}
-    <div class="mr-2 p-2 card" id="{{obj.user.username}}"
+    <div class="mr-2 p-2" id="{{obj.user.username}}"
       style="display: flex; flex-wrap: nowrap; align-items: center; justify-content: center; border-radius: 3px; border-top-color: #3c8dbc;">
       <!-- image -->
       {% if obj.images.count > 0 %}
-      <img class="max-width-image mr-1" src="{{obj.images.first.thumbnail.url}}" alt="Card image cap">
+      <img class="max-width-image mr-1" src="{{obj.images.first.thumbnail.url}}" alt="Card image cap"
+        id="image-{{obj.user.username}}">
       {% else %}
-      <img class="max-width-image mr-1" src="{% static '/final_main_app/user.png' %}" alt="Card image cap">
+      <img class="max-width-image mr-1" src="{% static '/final_main_app/user.png' %}" alt="Card image cap"
+        id="image-{{obj.user.username}}">
       {% endif %}
       <!-- end image -->
       <div style="display: flex;flex-wrap: nowrap; flex-direction: column;">
@@ -64,97 +65,6 @@
   document.getElementById("base_div").className = "col-12 content";
 
   // to store element and its priority
-  class QElement {
-    constructor(element, priority) {
-      this.element = element;
-      this.priority = priority;
-    }
-  }
-
-  // PriorityQueue class
-  class PriorityQueue {
-    // An array is used to implement priority
-    constructor() {
-      this.items = [];
-    }
-
-    // enqueue function to add element
-    // to the queue as per priority
-    enqueue(element, priority) {
-      // creating object from queue element
-      var qElement = new QElement(element, priority);
-      var contain = false;
-
-      // iterating through the entire
-      // item array to add element at the
-      // correct location of the Queue
-      for (var i = 0; i < this.items.length; i++) {
-        if (this.items[i].priority > qElement.priority) {
-          // Once the correct location is found it is
-          // enqueued
-          this.items.splice(i, 0, qElement);
-          contain = true;
-          break;
-        }
-      }
-
-      // if the element have the highest priority
-      // it is added at the end of the queue
-      if (!contain) {
-        this.items.push(qElement);
-      }
-    }
-
-    // dequeue method to remove
-    // element from the queue
-    dequeue() {
-      // return the dequeued element
-      // and remove it.
-      // if the queue is empty
-      // returns Underflow
-      if (this.isEmpty())
-        return "Underflow";
-      return this.items.shift();
-    }
-
-    // front function
-    front() {
-      // returns the highest priority element
-      // in the Priority queue without removing it.
-      if (this.isEmpty())
-        return "No elements in Queue";
-      return this.items[0];
-    }
-
-    // rear function
-    rear() {
-      // returns the lowest priority
-      // element of the queue
-      if (this.isEmpty())
-        return "No elements in Queue";
-      return this.items[this.items.length - 1];
-    }
-
-    // isEmpty function
-    isEmpty() {
-      // return true if the queue is empty.
-      return this.items.length == 0;
-    }
-
-    // printQueue function
-    // prints all the element of the queue
-    printPQueue() {
-      var str = "";
-      for (var i = 0; i < this.items.length; i++)
-        str += this.items[i].element + " ";
-      return str;
-    }
-
-    getPQueue() {
-      return this.items;
-    }
-  }
-
   var priorityQueue = new PriorityQueue();
 
   const roomName = JSON.parse(document.getElementById("room-name").textContent);
@@ -186,10 +96,10 @@
     if (data.message_type == 'user_status_message') {
       console.log(`user online status received ${data.username}: ${data.user_status}`)
       if (data.user_status == 'ONLINE') {
-        document.getElementById(data.username).classList.add('bg-success')
+        document.getElementById(`image-${data.username}`).classList.add('border-online')
       } else if (data.user_status == 'OFFLINE') {
-        document.getElementById(data.username).classList.remove('bg-success')
-        document.getElementById(data.username).classList.add('bg-secondary')
+        document.getElementById(`image-${data.username}`).classList.remove('border-online')
+        // document.getElementById(data.username).classList.add('bg-secondary')
       }
       return
     }
@@ -282,7 +192,7 @@
       );
     }
     sendUserStatus();
-    setInterval(sendUserStatus, 10000);
+    setInterval(sendUserStatus, 2000);
 
     window.addEventListener('beforeunload', function (e) {
       e.preventDefault();
@@ -306,6 +216,11 @@
 </script>
 
 <style>
+  .border-online {
+    border: 3px solid rgb(0, 255, 85);
+    border-radius: 30px;
+  }
+
   .results {
     display: flex;
     flex-wrap: wrap;
