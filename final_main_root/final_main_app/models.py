@@ -189,3 +189,12 @@ class Reply(models.Model):
     down_votes = models.IntegerField(default=0)
     answer = models.ForeignKey(to=Answer, related_name='replies',
                                on_delete=models.CASCADE)
+
+
+class Badge(models.Model):
+    name = models.CharField(max_length=140)
+    description = models.CharField(
+        max_length=140, default=None, null=True, blank=True)
+    icon = models.FileField(upload_to='badge_icons/', blank=False)
+    user = models.ManyToManyField(AppUser, related_name='user_badges')
+    created = models.DateTimeField(auto_now_add=True)

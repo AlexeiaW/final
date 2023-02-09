@@ -118,6 +118,10 @@ class CreateStoryView(LoginRequiredMixin, CreateView):
 
                 story.save()
 
+                # assign first story badge to user
+                badge = Badge.objects.get(pk=1)
+                self.request.user.appuser.user_badges.add(badge)
+
             # save and redirect as usual.
             messages.success(self.request,
                              'Success!',
@@ -341,6 +345,8 @@ class GroupDetail(DetailView):
 class StoryDetail(DetailView):
     model = Story
     template_name = 'story.html'
+
+
 # Password change view, render password change form and process submission of the form
 
 
