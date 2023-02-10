@@ -1,79 +1,33 @@
 {% extends "./base.html" %} {% block content %} {% if user.is_authenticated %}
 {% load static %}
 
-<!-- Gamification -->
-<div class="card border-light mb-3">
-  <div class="card-header">Rankings</div>
-  <div class="card-body">
-    <h5 class="card-title">Users who contribute meaningfully are ranked here</h5>
-    <p class="card-text">You can also be ranked here to show you are assisting the community in a meaningful and helpful
-      way. By contributing helpful answers, stories and questions, your ranking will grow, but more importantly - your
-      own
-      mental health support journey will be significantly improved by helping others.</p>
-
-    <!-- Leader board -->
-    <hr />
-    <h5 class="card-title">Leaderboard</h5>
-    <table class="table table-striped table-dark">
-      <thead>
-        <tr>
-          <th scope="col">Badge</th>
-          <th scope="col">Username</th>
-          <th scope="col">Full name</th>
-          <th scope="col">Points</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for appuserob in users_sorted %}
-        <tr>
-          {% if forloop.counter == 1 %}
-          <th scope="row">🥇</th>
-          {% elif forloop.counter == 2 %}
-          <th scope="row">🥈</th>
-          {% elif forloop.counter == 3 %}
-          <th scope="row">🥉</th>
-          {% else %}
-          <th scope="row"> </th>
-          {% endif %}
+<div class="row mt-4" style="text-align: center;">
+  <div class="col-lg-4">
+    <img class="mx-auto p-3" src="{% static '/final_main_app/notes.png' %}" alt="Card image cap">
+    <h2>Stories</h2>
+    <p>Write your
+      first story to earn a badge 😀</p>
+    <p><a class="btn btn-primary" href="/create-story/" role="button">Write Now</a></p>
+  </div><!-- /.col-lg-4 -->
+  <div class="col-lg-4">
+    <img class="mx-auto p-3" src="{% static '/final_main_app/group.png' %}" alt="Card image cap">
+    <h2>Groups</h2>
+    <p> Create a support group to earn a badge 💬</p>
+    <p><a class="btn btn-primary" href="/create-group/" role="button">Create Now</a></p>
+  </div><!-- /.col-lg-4 -->
+  <div class="col-lg-4">
+    <img class="mx-auto p-3" src="{% static '/final_main_app/qa.png' %}" alt="Card image cap">
+    <h2>Hub</h2>
+    <p>Answer a question to earn a MegaMind badge 🙋</p>
+    <p><a class="btn btn-primary" href="/hub/" role="button">Answer Now</a></p>
+  </div><!-- /.col-lg-4 -->
+</div><!-- /.row -->
 
 
-          <td>{{appuserob}}</td>
-          <td>{{appuserob.user.first_name}} {{appuserob.user.last_name}}</td>
-          <td># {{appuserob.upvote_sum}} </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-    <!-- Badges -->
-    <hr />
-    <h5 class="card-title">Your badges</h5>
-    <div class="badges">
-      {% if appuser.user_badges.count > 0 %}
-      {% for badge in appuser.user_badges.all %}
-      <div class="card mr-4">
-        <div class="card-body">
-          <small>{{badge.name}}</small>
-          <img src="{{badge.icon.url}}" alt="Card image cap">
-        </div>
-      </div>
-      {% endfor %}
-      {% else %}
-      <p>You can get badges by completing certain activities. <a href="/create-story/" class="card-link">Write</a> your
-        first story to earn a badge! 😀</p>
-      {% endif %}
-
-
-
-    </div>
-
-    <!-- badges end -->
-  </div>
-</div>
 
 <!-- Suggested content -->
 <br />
-<div class="card border-light mb-3">
+<div class="card border-light mb-3 mt-4">
   <div class="card-header">{{ appuser.user.username }} based on your interests we suggest...</div>
   <div class="card-body">
 
@@ -148,6 +102,80 @@
       </div>
       {% endfor %}
     </div>
+  </div>
+</div>
+
+<!-- Gamification -->
+<br />
+<div class="card border-light mb-3">
+  <div class="card-header">Your Badges</div>
+  <div class="card-body">
+    <!-- Badges -->
+    <div class="badges">
+      {% if appuser.user_badges.count > 0 %}
+      {% for badge in appuser.user_badges.all %}
+      <div class="card mr-4">
+        <div class="card-body">
+          <small>{{badge.name}}</small>
+          <img src="{{badge.icon.url}}" alt="Card image cap">
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="card-body">
+        <p><a href="/create-story/" class="card-link">Write</a> your
+          first story to earn a badge! 😀</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- badges end -->
+  </div>
+</div>
+
+<!-- Rankings -->
+<div class="card border-light mb-3">
+  <div class="card-header">Rankings</div>
+  <div class="card-body">
+    <h5 class="card-title">Users who contribute meaningfully are ranked here</h5>
+    <p class="card-text">You can also be ranked here to show you are assisting the community in a meaningful and helpful
+      way. By contributing helpful answers, stories and questions, your ranking will grow, but more importantly - your
+      own
+      mental health support journey will be significantly improved by helping others.</p>
+
+    <!-- Leader board -->
+    <hr />
+    <h5 class="card-title">Leaderboard</h5>
+    <table class="table table-striped table-dark">
+      <thead>
+        <tr>
+          <th scope="col">Badge</th>
+          <th scope="col">Username</th>
+          <th scope="col">Full name</th>
+          <th scope="col">Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for appuserob in users_sorted %}
+        <tr>
+          {% if forloop.counter == 1 %}
+          <th scope="row">🥇</th>
+          {% elif forloop.counter == 2 %}
+          <th scope="row">🥈</th>
+          {% elif forloop.counter == 3 %}
+          <th scope="row">🥉</th>
+          {% else %}
+          <th scope="row"> </th>
+          {% endif %}
+
+
+          <td>{{appuserob}}</td>
+          <td>{{appuserob.user.first_name}} {{appuserob.user.last_name}}</td>
+          <td># {{appuserob.upvote_sum}} </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 </div>
 
