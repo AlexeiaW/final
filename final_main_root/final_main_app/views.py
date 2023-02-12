@@ -69,6 +69,9 @@ def createGroup(request):
             appuser.groups.add(group)
             appuser.save()
 
+            badge = Badge.objects.get(name='Group Badge')
+            appuser.user_badges.add(badge)
+
             chat = Chat.objects.create(group=group)
 
             messages.success(request,
@@ -119,7 +122,7 @@ class CreateStoryView(LoginRequiredMixin, CreateView):
                 story.save()
 
                 # assign first story badge to user
-                badge = Badge.objects.get(pk=1)
+                badge = Badge.objects.get(name='Story badge')
                 self.request.user.appuser.user_badges.add(badge)
 
             # save and redirect as usual.
@@ -579,6 +582,10 @@ class CreateAnswerView(LoginRequiredMixin, CreateView):
                 answer.user = self.request.user.appuser
                 answer.question = self.get_question()
                 answer.save()
+
+                # assign hub answer badge to user
+                badge = Badge.objects.get(name='Hub badge')
+                self.request.user.appuser.user_badges.add(badge)
 
             # save and redirect as usual.
             messages.success(self.request,
