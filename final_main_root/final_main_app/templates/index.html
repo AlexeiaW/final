@@ -3,20 +3,23 @@
 
 <div class="row mt-4" style="text-align: center;">
   <div class="col-lg-4">
-    <img class="mx-auto p-3" src="{% static '/final_main_app/notes.png' %}" alt="Card image cap">
+    <img class="mx-auto p-3" src="{% static '/final_main_app/notebook.gif' %}" style="width: 128px;"
+      alt="Card image cap">
     <h2>Stories</h2>
     <p>Write your
       first story to earn a badge 😀</p>
     <p><a class="btn btn-primary" href="/create-story/" role="button">Write Now</a></p>
   </div><!-- /.col-lg-4 -->
   <div class="col-lg-4">
-    <img class="mx-auto p-3" src="{% static '/final_main_app/group.png' %}" alt="Card image cap">
+    <img class="mx-auto p-3" src="{% static '/final_main_app/bubble-chat.gif' %}" style="width: 128px;"
+      alt="Card image cap">
     <h2>Groups</h2>
     <p> Create a support group to earn a badge 💬</p>
     <p><a class="btn btn-primary" href="/create-group/" role="button">Create Now</a></p>
   </div><!-- /.col-lg-4 -->
   <div class="col-lg-4">
-    <img class="mx-auto p-3" src="{% static '/final_main_app/qa.png' %}" alt="Card image cap">
+    <img class="mx-auto p-3" src="{% static '/final_main_app/speech-bubble.gif' %}" style="width: 128px;"
+      alt="Card image cap">
     <h2>Hub</h2>
     <p>Answer a question to earn a MegaMind badge 🙋</p>
     <p><a class="btn btn-primary" href="/hub/" role="button">Answer Now</a></p>
@@ -116,8 +119,10 @@
       {% for badge in appuser.user_badges.all %}
       <div class="card mr-4">
         <div class="card-body">
-          <small>{{badge.name}}</small>
-          <img src="{{badge.icon.url}}" alt="Card image cap">
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <img src="{{badge.icon.url}}" style="width: 128px;" alt="Card image cap">
+            <small>{{badge.name}}</small>
+          </div>
         </div>
       </div>
       {% endfor %}
