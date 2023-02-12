@@ -2,7 +2,8 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <a class="navbar-brand p-1 mr-1 " href="/">
-    <img class="featurette-image img-fluid mx-auto" src="{% static '/final_main_app/home.png' %}" alt="My image">
+    <img class="featurette-image img-fluid mx-auto" src="{% static '/final_main_app/home.png' %}"
+      style="max-width: 32px;" alt="My image">
   </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
     aria-expanded="false" aria-label="Toggle navigation">
@@ -79,5 +80,13 @@
     display: block;
     margin-top: 0;
     /* remove the gap so it doesn't close */
+  }
+
+  .nav-link {
+    color: white !important;
+  }
+
+  .nav-link:hover {
+    color: #51d1d3 !important;
   }
 </style>
