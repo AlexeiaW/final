@@ -131,9 +131,17 @@ class CreateStoryView(LoginRequiredMixin, CreateView):
                              extra_tags='alert-success')
             return super().form_valid(form)
         elif action == 'PREVIEW':
-            preview = Question(
-                question=form.cleaned_data['question'],
-                title=form.cleaned_data['title'])
+            context = self.get_context_data()
+            contentCTX = context['content']
+            content = contentCTX.save(commit=False)
+            preview = Story(
+                category=form.cleaned_data['category'],
+                description=form.cleaned_data['description'],
+                content=content,
+                author=self.request.user.appuser.author,
+                title=form.cleaned_data['title'],
+                slug=form.cleaned_data['title'].lower()
+            )
             ctx = self.get_context_data(preview=preview)
             return self.render_to_response(context=ctx)
         return HttpResponseBadRequest()

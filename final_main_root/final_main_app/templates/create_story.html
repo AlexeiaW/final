@@ -12,8 +12,26 @@
         <button class="btn btn-primary" type="submit" name="action" value="SAVE">
           Publish!
         </button>
+      </div>
     </form>
 
   </div>
 </div>
+
+{% if preview %}
+<div class="card border-light mb-3">
+  <div class="card-header">Written by {{preview.author.first_name}} {{preview.author.last_name}}</div>
+  <div class="card-body">
+    <h5 class="card-title">{{preview.title}}</h5>
+    <p class="card-text">{{preview.description }}</p>
+    <footer><small>{{preview.created_on|date}}</small></footer>
+  </div>
+</div>
+
+<div class="card border-light mb-3">
+  <div class="card-body">
+    <p>{{preview.content.content.html|safe}}</p>
+  </div>
+</div>
+{% endif %}
 {% endblock %}
