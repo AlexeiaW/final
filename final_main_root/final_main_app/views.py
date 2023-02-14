@@ -421,6 +421,17 @@ def register(request):
             profile.save()
 
             registered = True
+
+            # Automatically login the user
+            try:
+                login(request, user)
+                messages.success(request,
+                                 'Registration successful!',
+                                 extra_tags='alert-success')
+                return HttpResponseRedirect('../')
+            except:
+                print('Unable to automatically log user in.')
+
         else:
             print(user_form.errors, profile_form.errors)
     else:

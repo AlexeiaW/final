@@ -4,10 +4,10 @@
   <div class="card-header">Register</div>
   <div class="card-body">
     <h5 class="card-title">Welcome</h5>
-    <p class="card-text">Here you can register to use the platform.</p>
     {% if registered %}
-    <strong>thank you for registering</strong>
+    <strong>Thank you for registering. You can log in <a href="/login/">here</a>.</strong>
     {% else %}
+    <p class="card-text">Here you can register to use the platform.</p>
     <form id="user_form" method="post" action="/register/" enctype="multipart/form-data">
       {% csrf_token %} {{ user_form.as_p }} {{ profile_form.as_p }}
 
