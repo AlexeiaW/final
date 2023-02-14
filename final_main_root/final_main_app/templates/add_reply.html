@@ -8,7 +8,7 @@
             enctype="multipart/form-data">
             {% csrf_token %} {{ answer_form.as_p }} {{ content.as_p }}
 
-            <input type="submit" name="submit" value="Reply" />
+            <input class="btn btn-primary" type="submit" name="submit" value="Reply" />
         </form>
     </div>
 </div>

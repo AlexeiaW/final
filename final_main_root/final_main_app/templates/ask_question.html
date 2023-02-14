@@ -3,18 +3,6 @@
   <div class="card-header">Ask a question</div>
   <div class="card-body">
     <div class="col-md-12">
-      {% if preview %}
-      <div class="card question-preview">
-        <div class="card-header">
-          Question Preview
-        </div>
-        <div class="card-body">
-          <h1 class="card-title">{{ preview.title }}</h1>
-          {{ preview.question }}
-        </div>
-      </div>
-      {% endif %}
-
       <form method="post">
         {% csrf_token %}
         {{ form.as_p }} {{ content.as_p }}
@@ -30,6 +18,17 @@
     </div>
   </div>
 </div>
+
+{% if preview %}
+<div class="card border-light mb-3">
+  <div class="card-header">{{ preview.user }}</div>
+  <div class="card-body">
+    <h5 class="card-title">{{ preview.title }}</h5>
+    <p class="card-text">{{preview.content.content.html|safe }}</p>
+    <footer><small>{{ preview.created|date}}</small></footer>
+  </div>
+</div>
+{% endif %}
 
 <style>
   .form-control {

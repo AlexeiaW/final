@@ -515,9 +515,14 @@ class AskQuestionView(LoginRequiredMixin, CreateView):
                              extra_tags='alert-success')
             return super().form_valid(form)
         elif action == 'PREVIEW':
-            preview = Question(
-                question=form.cleaned_data['question'],
-                title=form.cleaned_data['title'])
+            context = self.get_context_data()
+            content = context['content']
+            if content.is_valid() and form.is_valid():
+                question = form.save(commit=False)
+                question.user = self.request.user.appuser
+                question.content = content.save(commit=False)
+
+            preview = question
             ctx = self.get_context_data(preview=preview)
             return self.render_to_response(context=ctx)
         return HttpResponseBadRequest()
