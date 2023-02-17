@@ -137,6 +137,7 @@ class TestUserCanCreateAnswer(TestCase):
         self.factory = RequestFactory()
 
     def test_add_answer_endpoint_redirect_success(self):
+        Badge.objects.create(name='Hub badge')
         request = self.factory.post('/question/' + str(self.question.id) + '/answer/', data={
             'action': 'SAVE',
             'category': self.question.category.id,
