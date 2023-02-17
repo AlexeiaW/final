@@ -68,11 +68,19 @@ def createGroup(request):
 
             appuser.groups.add(group)
             appuser.save()
+            
+            # Create chat room for the group
+            Chat.objects.create(group=group)
 
-            badge = Badge.objects.get(name='Group Badge')
-            appuser.user_badges.add(badge)
-
-            chat = Chat.objects.create(group=group)
+            try:
+                user_badge = Badge.objects.get(user=appuser)
+            except Badge.DoesNotExist:
+                badge = Badge.objects.get(name='Group Badge')
+                appuser.user_badges.add(badge)
+                return render(request, 'my-groups.html', {
+                    'badge_unlocked': True,
+                    'appuser': request.user.appuser
+                })
 
             messages.success(request,
                              'Your group was successfully created!',
@@ -326,7 +334,8 @@ def myFriends(request):
 @login_required
 def myGroups(request):
     return render(request, 'my-groups.html', {
-        'appuser': request.user.appuser
+        'appuser': request.user.appuser,
+        'badge_unlocked': False,
     })
 
 
