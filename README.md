@@ -7,6 +7,7 @@
 1. in "final_main_root" folder run `python manage.py runserver` in the terminal
 1. open a separate new terminal in root folder where Pipfile and Pipfile.lock file is, run `pipenv shell` to get into virtual environment. Change directory to "final_main_root" by running `cd final_main_root`. Then in "final_main_root" folder
    run `celery -A final_main worker -l INFO`
+1. A video tutorial to run this project is also inluded with this repo. See the video in root folder `project installation tutorial.mp4`.
 
 ## Notes
 
@@ -15,7 +16,7 @@
 - pipenv is the virtual environment package used. use pipenv shell to enter virtual environment, install packages using requirements.txt and then start celery in a seperate terminal.
 - Run redis server software on the computer on the default port (6379) for celery workers to do async image processing.
 - **The image uploaded for user profile photo has to be jpeg format, only jpeg accepted.**
-- Command to run celery for async tasks: celery -A final_main worker -l INFO (https://docs.celeryq.dev/en/stable/django/first-steps-with-django.html)
+- Command to run celery for async tasks: `celery -A final_main worker -l INFO` (https://docs.celeryq.dev/en/stable/django/first-steps-with-django.html)
 - cd into final_main (root) and start the celery python package in a seperate terminal in the root. This is for image processing.
 - cd into final_main (root) and then run "python manage.py runserver" in the pipenv shell, to start django server http://127.0.0.1:8000/.
 - create a new user at http://127.0.0.1:8000/register/ and then login http://127.0.0.1:8000/login/
@@ -24,4 +25,8 @@
 - there is a full git commit history
 - there are also tests you can run with manage.py
 - unit test can be run with `python manage.py test`.
-- python manage.py seed final_main_app --number=100 (this is used to populate the database with dummy data)
+
+## Predifined users:
+
+- usernames: `a_man_007`, `supe_100_katy`, `sarah_s_100`, `shaun_001`, `a_peet_101`, `niel_09`, `pam_1123`, `jr_123`
+- password for these usernames: `1234`
