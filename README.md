@@ -8,6 +8,10 @@
 1. open a separate new terminal in root folder where Pipfile and Pipfile.lock file is, run `pipenv shell` to get into virtual environment. Change directory to "final_main_root" by running `cd final_main_root`. Then in "final_main_root" folder
    run `celery -A final_main worker -l INFO`
 1. A video tutorial to run this project is also inluded with this repo. See the video in root folder `project installation tutorial.mp4`.
+   <a href="https://www.loom.com/share/f56658a394b94909af0e41523bbe2b2a">
+   <p>project installation tutorial - Watch Video</p>
+   <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/f56658a394b94909af0e41523bbe2b2a-with-play.gif">
+   </a>
 
 ## Notes
 
