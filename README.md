@@ -2,7 +2,7 @@
 
 1. Start Redis server on your computer on on the default port (6379)
 1. in root folder where Pipfile and Pipfile.lock file is run `pipenv shell` in the terminal to create virtual environment. (pipenv has to be pre-installed on your local machine)
-1. in root folder where Pipfile and Pipfile.lock is run `pipenv install` in the terminal to install python packages in the requirements.txt file
+1. in root folder where Pipfile and Pipfile.lock is run `pipenv install` in the terminal to install python packages in the requirements.txt file. (You could also use `pipenv install < requirements.txt`)
 1. in root folder where Pipfile and Pipfile.lock is run `cd final_main_root` to change the terminal directory to final_main_root folder
 1. in "final_main_root" folder run `python manage.py runserver` in the terminal
 1. open a separate new terminal in root folder where Pipfile and Pipfile.lock file is, run `pipenv shell` to get into virtual environment. Change directory to "final_main_root" by running `cd final_main_root`. Then in "final_main_root" folder
